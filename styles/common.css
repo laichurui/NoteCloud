@@ -6,12 +6,12 @@ body {
     margin: 0;
 }
 
-code {
+pre code[class*=language-] {
     border-radius: 5px;
     border-left: 5px solid aquamarine;
 }
 
-code:hover {
+pre code[class*=language-]:hover {
     border-left-color: blue;
 }
 

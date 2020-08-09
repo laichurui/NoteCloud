@@ -4,44 +4,16 @@
 
 asaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
-a
-
-a
-
-a
-
-a
-a
-
-a
-
-a
-
-a
-
-a
-
-a
-
-a
-
-a
-
-a
-
-a
-
-a
-
-a
-
-a
 
 a
 
 ```python
 class a:
-    pass
+    def function():
+        self.a = 1
+        self.b = 2
+        self.b = 2
+        self.b = 2
 ```
 
 ```javascript
