@@ -1,0 +1,59 @@
+:root {
+    --left-width: 20%;
+}
+
+body {
+    margin: 0;
+}
+
+code {
+    border-radius: 5px;
+    border-left: 5px solid aquamarine;
+}
+
+code:hover {
+    border-left-color: blue;
+}
+
+.left {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--left-width);
+    overflow: auto; /* 滚动条 */
+}
+
+.left::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.left::-webkit-scrollbar-thumb {
+    background: gray;
+}
+
+.left::-webkit-scrollbar-track:hover {
+    background: black;
+}
+
+.left div {
+    padding-left: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+    background-color: blue;
+}
+
+.left ul {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+.right {
+    margin-left: var(--left-width);
+    padding-left: 10px;
+    padding-right: 10px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
