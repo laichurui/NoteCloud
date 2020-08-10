@@ -11,11 +11,11 @@
  * - 加载失败弹出错误码提示窗口
  *
  * @param url {String} 文件的路径
- * @param elementId {String} 用于展示文件内容的元素id
+ * @param element {Element} 用于展示文件内容的元素
  * @return any
  * @see loadSuccess
  */
-function loadMdFile(url, elementId) {
+function loadMdFile(url, element) {
     /** @type {XMLHttpRequest} */
     let request = new XMLHttpRequest();
     request.open('GET', url, true);
@@ -24,7 +24,7 @@ function loadMdFile(url, elementId) {
     request.onreadystatechange = function () {
         if (request.readyState === 4) {
             if (request.status === 200) {
-                loadSuccess(request.responseText, elementId);
+                loadSuccess(request.responseText, element);
             } else {
                 alert("error code: " + request.status);
             }
@@ -36,15 +36,34 @@ function loadMdFile(url, elementId) {
  * 成功加载文件后执行
  *
  * `content` 按 markdown 语法解析为对应的 html 语句，
- * 解析后的内容通过 `elementId` 对应的标签展示
+ * 解析后的内容通过 `element` 展示
  *
  * @param content {String} 原始文件内容
- * @param elementId {String} html标签元素的id
+ * @param element {Element} html标签元素
  * @see loadMdFile
  */
-function loadSuccess(content, elementId) {
-    document.getElementById(elementId).innerHTML = marked(content);
+function loadSuccess(content, element) {
+    element.innerHTML = marked(content);
     document.querySelectorAll("pre code").forEach(
         (block) => hljs.highlightBlock(block)
     );
 }
+
+/**
+ * 自动加载 md 文件<br>
+ * 适用标签：`class` 属性中包含 `md-file`，并且设置了 `data-md-url` 属性
+ *
+ * @see loadMdFile
+ */
+function autoLoadMdFile() {
+    document.querySelectorAll(".md-file").forEach(
+        (element) => {
+            /** @type string */
+            let url = element.getAttribute("data-md-url");
+            if (url == null) return;
+            loadMdFile(url, element);
+        }
+    );
+}
+
+window.onload = autoLoadMdFile;

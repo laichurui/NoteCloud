@@ -8,11 +8,6 @@ body {
 
 pre code[class*=language-] {
     border-radius: 5px;
-    border-left: 5px solid aquamarine;
-}
-
-pre code[class*=language-]:hover {
-    border-left-color: blue;
 }
 
 .left {
@@ -35,7 +30,7 @@ pre code[class*=language-]:hover {
     padding-left: 10px;
     height: 20%;
     color: white;
-    background-color: blue;
+    background-color: #2983bb;
 }
 
 .nav {
