@@ -58,16 +58,13 @@ pre code[class*=language-]:hover {
 
 .nav::-webkit-scrollbar-thumb {
     background: rgba(88, 88, 88, 0.3);
-    border-radius: 3px;
 }
 
 .nav::-webkit-scrollbar-thumb:hover {
     background: #888888;
-    border-radius: 3px;
 }
 
 .nav::-webkit-scrollbar-track:hover {
     background: rgba(88, 88, 88, 0.3);
-    border-radius: 3px;
 }
 

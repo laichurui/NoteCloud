@@ -10,13 +10,6 @@ a
 ```python
 class a:
     def function():
-        self.a = 1
+        self.a = 1 + 1
         self.b = 2
-        self.b = 2
-        self.b = 2
-```
-
-```javascript
-var a="sad"
-var b=1
 ```
