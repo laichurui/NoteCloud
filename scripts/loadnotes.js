@@ -4,9 +4,6 @@
  * 需要导入 highlight.pack.js 和 marked.min.js
  */
 
-import "./lib/marked.js";
-import hljs from "./lib/highlight.js";
-
 /**
  * 使用 ajax 从服务器加载 markdown 文件
  *
@@ -47,8 +44,29 @@ function loadMdFile(url, element) {
  */
 function loadSuccess(content, element) {
     element.innerHTML = marked(content);
-    document.querySelectorAll("pre code").forEach(
-        (block) => hljs.highlightBlock(block)
+    element.querySelectorAll("code").forEach(
+        (block) => {
+            hljs.highlightBlock(block);
+
+            // 在 "pre code" 标签中添加行号
+            if (block.parentElement != null &&
+                block.parentElement.tagName.toLowerCase() === "pre") {
+
+                /** @type {HTMLSpanElement} */
+                let lineNumbers = document.createElement("span");
+                lineNumbers.classList.add("line-number-rows");
+
+                /** @type {int} */
+                let line_count = block.innerHTML.split("\n").length;
+                for (let i = 1; i <= line_count; i++) {
+                    /** @type {HTMLSpanElement} */
+                    let num = document.createElement("span");
+                    num.classList.add("line-number");
+                    lineNumbers.appendChild(num);
+                }
+                block.prepend(lineNumbers);
+            }
+        }
     );
 }
 

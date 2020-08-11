@@ -12,7 +12,7 @@ Marked is
 
 <h2 id="demo">Demo</h2>
 
-Checkout the [demo page](./demo/) to see marked in action ⛹️
+Checkout the [demo page](https://marked.js.org/demo/) to see marked in action ⛹️
 
 These documentation pages are also rendered using marked 💯
 
@@ -63,7 +63,7 @@ $ marked -s "*hello world*"
 ```
 
 
-Marked offers [advanced configurations](#/USING_ADVANCED.md) and [extensibility](#/USING_PRO.md) as well.
+Marked offers [advanced configurations](https://marked.js.org/#/USING_ADVANCED.md) and [extensibility](https://marked.js.org/#/USING_PRO.md) as well.
 
 <h2 id="specifications">Supported Markdown specifications</h2>
 
@@ -81,4 +81,4 @@ By supporting the above Markdown flavors, it's possible that Marked can help you
 
 The only completely secure system is the one that doesn't exist in the first place. Having said that, we take the security of Marked very seriously.
 
-Therefore, please disclose potential security issues by email to the project [committers](#/AUTHORS.md) as well as the [listed owners within NPM](https://docs.npmjs.com/cli/owner). We will provide an initial assessment of security reports within 48 hours and should apply patches within 2 weeks (also, feel free to contribute a fix for the issue).
+Therefore, please disclose potential security issues by email to the project [committers](https://marked.js.org/#/AUTHORS.md) as well as the [listed owners within NPM](https://docs.npmjs.com/cli/owner). We will provide an initial assessment of security reports within 48 hours and should apply patches within 2 weeks (also, feel free to contribute a fix for the issue).

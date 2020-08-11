@@ -1,13 +1,45 @@
 :root {
-    --left-width: 20%;
+    --left-width: 280px;
+
+    /*全局颜色*/
+    --text-color-light: #888888;
 }
 
 body {
     margin: 0;
 }
 
-pre code[class*=language-] {
+/*代码高亮的 code 标签*/
+code[class*=hljs] {
     border-radius: 5px;
+    font-size: 120%;
+    display: inline;
+}
+
+pre code[class*=hljs] {
+    display: block;
+}
+
+/*代码的行号组合*/
+pre code[class*=hljs] > .line-number-rows {
+    counter-reset: line_number 0;
+
+    float: left;
+    display: block;
+
+    border-right: 1px solid var(--text-color-light);
+    color: var(--text-color-light);
+
+    margin-right: 10px;
+    padding-right: 5px;
+    text-align: right;
+}
+
+/*代码行号*/
+pre code[class*=hljs] > .line-number-rows > .line-number::before {
+    display: block;
+    counter-increment: line_number 1;
+    content: counter(line_number);
 }
 
 .left {
@@ -36,6 +68,7 @@ pre code[class*=language-] {
 .nav {
     overflow: auto;
     height: 80%;
+    background-color: green;
 }
 
 .nav-list {
@@ -43,6 +76,7 @@ pre code[class*=language-] {
     padding-left: 10px;
     margin-block-start: 0;
     margin-block-end: 0;
+    cursor: default;
 }
 
 /*导航栏的滚动条样式*/
