@@ -4,6 +4,9 @@
  * 需要导入 highlight.pack.js 和 marked.min.js
  */
 
+import "./lib/marked.js";
+import hljs from "./lib/highlight.js";
+
 /**
  * 使用 ajax 从服务器加载 markdown 文件
  *
@@ -51,12 +54,12 @@ function loadSuccess(content, element) {
 
 /**
  * 自动加载 md 文件<br>
- * 适用标签：`class` 属性中包含 `md-file`，并且设置了 `data-md-url` 属性
+ * 适用标签：`class` 属性中包含 `md-file-preview`，并且设置了 `data-md-url` 属性
  *
  * @see loadMdFile
  */
 function autoLoadMdFile() {
-    document.querySelectorAll(".md-file").forEach(
+    document.querySelectorAll(".md-file-preview").forEach(
         (element) => {
             /** @type string */
             let url = element.getAttribute("data-md-url");
