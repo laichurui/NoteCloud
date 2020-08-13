@@ -46,20 +46,40 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     content: counter(line_number);
 }
 
-.left {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: var(--left-width);
+/*适用于小屏幕*/
+@media screen and (max-width: 768px) {
+    /*页面左侧导航栏*/
+    .sidebar {
+        width: 85%;
+        display: none;
+    }
+
+    /*右侧预览标签*/
+    .preview {
+        padding-left: 10px;
+        padding-right: 10px;
+        word-wrap: break-word;
+        text-align: justify;
+    }
 }
 
-.right {
-    margin-left: var(--left-width);
-    padding-left: 20px;
-    padding-right: 10px;
-    word-wrap: break-word;
-    text-align: justify;
+/*适用于大屏幕*/
+@media screen and (min-width: 769px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--left-width);
+    }
+
+    .preview {
+        margin-left: var(--left-width);
+        padding-left: 20px;
+        padding-right: 10px;
+        word-wrap: break-word;
+        text-align: justify;
+    }
 }
 
 .logo {
@@ -68,35 +88,37 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     background-color: #2983bb;
 }
 
-.nav {
+.div_for_nav {
     /*TODO 设置高度*/
+    height: 100%;
     overflow: auto;
-    background-color: green;
+    background-color: black;
+    color: white;
 }
 
 .nav-list {
     list-style-type: none;
-    padding-left: 10px;
+    padding-left: 1em;
     margin-block-start: 0;
     margin-block-end: 0;
     cursor: default;
 }
 
 /*导航栏的滚动条样式*/
-.nav::-webkit-scrollbar {
+.div_for_nav::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
-.nav::-webkit-scrollbar-thumb {
+.div_for_nav::-webkit-scrollbar-thumb {
     background: rgba(88, 88, 88, 0.3);
 }
 
-.nav::-webkit-scrollbar-thumb:hover {
+.div_for_nav::-webkit-scrollbar-thumb:hover {
     background: #888888;
 }
 
-.nav::-webkit-scrollbar-track:hover {
+.div_for_nav::-webkit-scrollbar-track:hover {
     background: rgba(88, 88, 88, 0.3);
 }
 

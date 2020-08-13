@@ -72,19 +72,23 @@ function loadSuccess(content, element) {
 
 /**
  * 自动加载 md 文件<br>
- * 适用标签：`class` 属性中包含 `md-file-preview`，并且设置了 `data-md-url` 属性
+ * 适用标签：设置了 `data-md-url` 属性的标签
  *
  * @see loadMdFile
  */
 function autoLoadMdFile() {
-    document.querySelectorAll(".md-file-preview").forEach(
+    document.querySelectorAll("[data-md-url]").forEach(
         (element) => {
             /** @type string */
             let url = element.getAttribute("data-md-url");
-            if (url == null) return;
             loadMdFile(url, element);
         }
     );
 }
 
 window.onload = autoLoadMdFile;
+
+//TODO 删除
+function btn_click() {
+    document.documentElement.style.setProperty("--left-width", "0");
+}
