@@ -9,15 +9,26 @@ body {
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
+a::after {
+    content: url(../images/link.svg);
+}
+
 /*代码高亮的 code 标签*/
 code[class*=hljs] {
-    border-radius: 5px;
     font-size: 120%;
+
     display: inline;
+    padding: 0;
 }
 
 pre code[class*=hljs] {
     display: block;
+    padding: .5em;
+    border-radius: 5px;
 }
 
 /*代码的行号组合*/
@@ -55,19 +66,18 @@ pre code[class*=hljs] > .line-number-rows > .line-number::before {
     padding-left: 20px;
     padding-right: 10px;
     word-wrap: break-word;
-    word-break: break-all;
+    text-align: justify;
 }
 
 .logo {
     padding-left: 10px;
-    height: 20%;
     color: white;
     background-color: #2983bb;
 }
 
 .nav {
+    /*TODO 设置高度*/
     overflow: auto;
-    height: 80%;
     background-color: green;
 }
 
