@@ -9,30 +9,23 @@ body {
     margin: 0;
 }
 
-a {
-    text-decoration: none;
-}
-
-a::after {
-    content: url(../images/link.svg);
-}
-
 /*代码高亮的 code 标签*/
-code[class*=hljs] {
-    font-size: 120%;
-
+:not(pre) > code[class*=hljs] {
     display: inline;
-    padding: 0;
+    padding: 0.1em;
+    font-family: inherit;
+    font-size: 90%;
+    border-radius: 5px;
 }
 
-pre code[class*=hljs] {
+pre > code[class*=hljs] {
+    font-size: 120%;
     display: block;
-    padding: .5em;
     border-radius: 5px;
 }
 
 /*代码的行号组合*/
-pre code[class*=hljs] > .line-number-rows {
+pre > code[class*=hljs] > .line-number-rows {
     counter-reset: line_number 0;
 
     float: left;
@@ -47,7 +40,7 @@ pre code[class*=hljs] > .line-number-rows {
 }
 
 /*代码行号*/
-pre code[class*=hljs] > .line-number-rows > .line-number::before {
+pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     display: block;
     counter-increment: line_number 1;
     content: counter(line_number);
