@@ -91,18 +91,11 @@ window.onload = autoLoadMdFile;
 //TODO 删除
 function btn_click() {
     /** @type {HTMLElement} */
-    let sidebar = document.getElementById("sidebar");
-    /** @type {HTMLElement} */
-    let preview = document.getElementById("preview");
-
-    if (isclosed) {
-        replaceOrAddClass(sidebar, "anim-close", "anim-close-reverse");
-        replaceOrAddClass(preview, "anim-expand", "anim-expand-reverse");
-    } else {
-        replaceOrAddClass(sidebar, "anim-close-reverse", "anim-close");
-        replaceOrAddClass(preview, "anim-expand-reverse", "anim-expand");
-    }
-    isclosed = !isclosed;
+    let wrapper = document.querySelector(".wrapper[data-state]");
+    /** @type {string} */
+    let state = wrapper.getAttribute("data-state");
+    wrapper.setAttribute("data-state",
+        state === "default" ? "article" : "default");
 }
 
 /**
@@ -125,5 +118,3 @@ function replaceOrAddClass(element, old_class, new_class) {
         element.classList.add(new_class);
     }
 }
-
-var isclosed = false;

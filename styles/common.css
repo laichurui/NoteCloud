@@ -49,13 +49,13 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
     /*页面左侧导航栏*/
-    #sidebar {
+    .sidebar {
         width: 85%;
         display: none;
     }
 
     /*右侧预览标签*/
-    #preview {
+    .preview {
         padding-left: 10px;
         padding-right: 10px;
         word-wrap: break-word;
@@ -65,41 +65,34 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 
 /*适用于大屏幕*/
 @media screen and (min-width: 769px) {
-    #sidebar {
+    .sidebar {
         position: fixed;
         top: 0;
+        bottom: 0;
         left: 0;
-        height: 100vh;
         width: var(--left-width);
+        transition: left .3s ease 0s; /* left属性添加过渡动画 */
     }
 
-
-    #preview {
-        margin-left: var(--left-width);
+    .preview {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: var(--left-width);
         padding-left: 20px;
         padding-right: 10px;
         word-wrap: break-word;
         text-align: justify;
+        transition: left .3s ease 0s; /* left属性添加过渡动画 */
     }
 
-    #sidebar.anim-close {
-        animation: slide-out 1s;
-        animation-fill-mode: forwards;
+    .wrapper[data-state=article] .sidebar {
+        left: calc(-1 * var(--left-width));
     }
 
-    #preview.anim-expand {
-        animation: move-left 1s;
-        animation-fill-mode: forwards;
-    }
-
-    #sidebar.anim-close-reverse {
-        animation: slide-out 1s reverse;
-        animation-fill-mode: forwards;
-    }
-
-    #preview.anim-expand-reverse {
-        animation: move-left 1s reverse;
-        animation-fill-mode: forwards;
+    .wrapper[data-state=article] .preview {
+        left: 0;
+        padding-left: 10px;
     }
 }
 
@@ -141,23 +134,4 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 
 .div-for-nav::-webkit-scrollbar-track:hover {
     background: rgba(88, 88, 88, 0.3);
-}
-
-/*左侧滑出动画*/
-@keyframes slide-out {
-    from {
-        width: var(--left-width);
-    }
-    to {
-        width: 0;
-    }
-}
-
-@keyframes move-left {
-    from {
-        margin-left: var(--left-width);
-    }
-    to {
-        margin-left: 0;
-    }
 }
