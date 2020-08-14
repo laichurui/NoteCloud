@@ -49,13 +49,13 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
     /*页面左侧导航栏*/
-    .sidebar {
+    #sidebar {
         width: 85%;
         display: none;
     }
 
     /*右侧预览标签*/
-    .preview {
+    #preview {
         padding-left: 10px;
         padding-right: 10px;
         word-wrap: break-word;
@@ -65,7 +65,7 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 
 /*适用于大屏幕*/
 @media screen and (min-width: 769px) {
-    .sidebar {
+    #sidebar {
         position: fixed;
         top: 0;
         left: 0;
@@ -73,12 +73,33 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
         width: var(--left-width);
     }
 
-    .preview {
+
+    #preview {
         margin-left: var(--left-width);
         padding-left: 20px;
         padding-right: 10px;
         word-wrap: break-word;
         text-align: justify;
+    }
+
+    #sidebar.anim-close {
+        animation: slide-out 1s;
+        animation-fill-mode: forwards;
+    }
+
+    #preview.anim-expand {
+        animation: move-left 1s;
+        animation-fill-mode: forwards;
+    }
+
+    #sidebar.anim-close-reverse {
+        animation: slide-out 1s reverse;
+        animation-fill-mode: forwards;
+    }
+
+    #preview.anim-expand-reverse {
+        animation: move-left 1s reverse;
+        animation-fill-mode: forwards;
     }
 }
 
@@ -88,7 +109,7 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     background-color: #2983bb;
 }
 
-.div_for_nav {
+.div-for-nav {
     /*TODO 设置高度*/
     height: 100%;
     overflow: auto;
@@ -105,20 +126,38 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 }
 
 /*导航栏的滚动条样式*/
-.div_for_nav::-webkit-scrollbar {
+.div-for-nav::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
-.div_for_nav::-webkit-scrollbar-thumb {
+.div-for-nav::-webkit-scrollbar-thumb {
     background: rgba(88, 88, 88, 0.3);
 }
 
-.div_for_nav::-webkit-scrollbar-thumb:hover {
+.div-for-nav::-webkit-scrollbar-thumb:hover {
     background: #888888;
 }
 
-.div_for_nav::-webkit-scrollbar-track:hover {
+.div-for-nav::-webkit-scrollbar-track:hover {
     background: rgba(88, 88, 88, 0.3);
 }
 
+/*左侧滑出动画*/
+@keyframes slide-out {
+    from {
+        width: var(--left-width);
+    }
+    to {
+        width: 0;
+    }
+}
+
+@keyframes move-left {
+    from {
+        margin-left: var(--left-width);
+    }
+    to {
+        margin-left: 0;
+    }
+}

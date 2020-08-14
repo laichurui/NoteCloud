@@ -10,7 +10,7 @@
  * - 加载成功调用 {@link loadSuccess} 展示文件内容
  * - 加载失败弹出错误码提示窗口
  *
- * @param url {String} 文件的路径
+ * @param url {string} 文件的路径
  * @param element {Element} 用于展示文件内容的元素
  * @return any
  * @see loadSuccess
@@ -38,7 +38,7 @@ function loadMdFile(url, element) {
  * `content` 按 markdown 语法解析为对应的 html 语句，
  * 解析后的内容通过 `element` 展示
  *
- * @param content {String} 原始文件内容
+ * @param content {string} 原始文件内容
  * @param element {Element} html标签元素
  * @see loadMdFile
  */
@@ -90,5 +90,40 @@ window.onload = autoLoadMdFile;
 
 //TODO 删除
 function btn_click() {
-    document.documentElement.style.setProperty("--left-width", "0");
+    /** @type {HTMLElement} */
+    let sidebar = document.getElementById("sidebar");
+    /** @type {HTMLElement} */
+    let preview = document.getElementById("preview");
+
+    if (isclosed) {
+        replaceOrAddClass(sidebar, "anim-close", "anim-close-reverse");
+        replaceOrAddClass(preview, "anim-expand", "anim-expand-reverse");
+    } else {
+        replaceOrAddClass(sidebar, "anim-close-reverse", "anim-close");
+        replaceOrAddClass(preview, "anim-expand-reverse", "anim-expand");
+    }
+    isclosed = !isclosed;
 }
+
+/**
+ * 替换或添加 `class` 属性
+ *
+ * - 如果 `new_class` 存在，不执行任何操作
+ * - 如果 `old_class` 存在，则替换为 `new_class`
+ * - 如果 `old_class` 不存在，直接添加 `new_class`
+ * @param element {HTMLElement} html 标签
+ * @param old_class {string} 旧类
+ * @param new_class {string} 新类
+ */
+function replaceOrAddClass(element, old_class, new_class) {
+    if (element.classList.contains(new_class))
+        return;
+
+    if (element.classList.contains(old_class)) {
+        element.classList.replace(old_class, new_class);
+    } else {
+        element.classList.add(new_class);
+    }
+}
+
+var isclosed = false;
