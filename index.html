@@ -22,98 +22,109 @@
         <div class="logo">
             <h1 style="margin: 0;">笔记云</h1>
         </div>
-        <div class="div-for-nav">
-            <ul class="nav-list">
-                <li>3</li>
-                <li>1</li>
-                <li>2asdfsadfasdfsdfasdfsdfasdfsadfasdf</li>
-                <li>你好</li>
-                <ul class="nav-list">
-                    <li>我也好</li>
-                </ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>3</li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
+        <div class="nav-tree">
+            <ul class="nav-tree-list">
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2asdfsadfasdfsdfasdfsdfasdfsadfasdf</li>
+                <li class="nav-tree-item">你好</li>
+                <li class="nav-tree-item _branch">分支
+                    <!--三角形控制打开关闭-->
+                    <div class="nav-tree-item-expander" onclick="ex_click()"></div>
+                    <ul class="nav-tree-list">
+                        <li class="nav-tree-item">他也好</li>
+                        <li class="nav-tree-item _branch _opened">分支
+                            <!--三角形控制打开关闭-->
+                            <div class="nav-tree-item-expander" onclick="ex_click()"></div>
+                            <ul class="nav-tree-list">
+                                <li class="nav-tree-item">他也好</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">3</li>
+                <li class="nav-tree-item">1</li>
+                <li class="nav-tree-item">2</li>
+                <li class="nav-tree-item">3</li>
             </ul>
         </div>
     </div>

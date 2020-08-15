@@ -26,7 +26,7 @@ function loadMdFile(url, element) {
             if (request.status === 200) {
                 loadSuccess(request.responseText, element);
             } else {
-                alert("error code: " + request.status);
+                alert(`error code: ${request.status} \n url: ${url}`);
             }
         }
     };
@@ -88,6 +88,7 @@ function autoLoadMdFile() {
 
 window.onload = autoLoadMdFile;
 
+
 //TODO 删除
 function btn_click() {
     /** @type {HTMLElement} */
@@ -98,23 +99,12 @@ function btn_click() {
         state === "default" ? "article" : "default");
 }
 
-/**
- * 替换或添加 `class` 属性
- *
- * - 如果 `new_class` 存在，不执行任何操作
- * - 如果 `old_class` 存在，则替换为 `new_class`
- * - 如果 `old_class` 不存在，直接添加 `new_class`
- * @param element {HTMLElement} html 标签
- * @param old_class {string} 旧类
- * @param new_class {string} 新类
- */
-function replaceOrAddClass(element, old_class, new_class) {
-    if (element.classList.contains(new_class))
-        return;
-
-    if (element.classList.contains(old_class)) {
-        element.classList.replace(old_class, new_class);
+//TODO 删除
+function ex_click() {
+    let t = document.querySelector("._branch");
+    if (t.classList.contains("_opened")) {
+        t.classList.remove("_opened");
     } else {
-        element.classList.add(new_class);
+        t.classList.add("_opened");
     }
 }

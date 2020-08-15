@@ -1,7 +1,8 @@
 :root {
-    --left-width: 280px;
+    /*侧边栏宽度*/
+    --sidebar-width: 280px;
 
-    /*全局颜色*/
+    /**全局颜色*/
     --text-color-light: #888888;
 }
 
@@ -11,11 +12,12 @@ body {
 
 /*代码高亮的 code 标签*/
 :not(pre) > code[class*=hljs] {
+    font-size: 90%;
     display: inline;
+    border-radius: 5px;
+
     padding: 0.1em;
     font-family: inherit;
-    font-size: 90%;
-    border-radius: 5px;
 }
 
 pre > code[class*=hljs] {
@@ -24,7 +26,7 @@ pre > code[class*=hljs] {
     border-radius: 5px;
 }
 
-/*代码的行号组合*/
+/*代码的行号列*/
 pre > code[class*=hljs] > .line-number-rows {
     counter-reset: line_number 0;
 
@@ -43,8 +45,107 @@ pre > code[class*=hljs] > .line-number-rows {
 pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     display: block;
     counter-increment: line_number 1;
-    content: counter(line_number);
+    content: counter(line_number); /* 填充内容 */
 }
+
+.logo {
+    padding-left: 10px;
+    color: white;
+    background-color: #2983bb;
+}
+
+/*----- 目录树相关样式开始 -----*/
+
+/*导航目录树*/
+.nav-tree {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 0;
+
+    /*TODO 设置高度*/
+    height: 100%;
+    overflow: auto;
+    background-color: #222222;
+    color: white;
+}
+
+/*导航列表，包含多个 .nav-tree-item */
+.nav-tree-list {
+    list-style-type: none;
+    padding-left: 1em;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    cursor: default;
+}
+
+/*导航项*/
+.nav-tree-item {
+    position: relative;
+    line-height: 1.5em;
+}
+
+/*三角形符号，表示打开或关闭导航项*/
+.nav-tree-item-expander {
+    position: absolute;
+    top: 0;
+    left: -0.8em;
+    width: 0.6em;
+    cursor: pointer;
+}
+
+/*右三角形*/
+.nav-tree-item-expander::before {
+    margin-top: .5em;
+    display: block;
+    width: 0;
+    height: 0;
+    border-width: .3em;
+    border-style: solid;
+    /*
+    设置左边框颜色
+    当 width,height 都为 0 时，左边框是三角形
+    */
+    border-color: transparent transparent transparent white;
+    /*必须设置 content 属性，否则无法显示这个元素*/
+    content: "";
+}
+
+/*子项目打开时更改为下三角形*/
+.nav-tree-item._opened > .nav-tree-item-expander::before {
+    border-width: .23em;
+    border-color: transparent white white transparent;
+}
+
+/*子列表默认不显示*/
+.nav-tree-item > .nav-tree-list {
+    display: none;
+}
+
+/*项目打开时显示子列表*/
+.nav-tree-item._opened > .nav-tree-list {
+    display: block;
+}
+
+
+/*导航栏的滚动条样式*/
+.nav-tree::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.nav-tree::-webkit-scrollbar-thumb {
+    background: rgba(88, 88, 88, 0.3);
+}
+
+.nav-tree::-webkit-scrollbar-thumb:hover {
+    background: #888888;
+}
+
+.nav-tree::-webkit-scrollbar-track:hover {
+    background: rgba(88, 88, 88, 0.3);
+}
+
+/*----- 目录树相关样式结束 -----*/
 
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
@@ -70,7 +171,7 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
         top: 0;
         bottom: 0;
         left: 0;
-        width: var(--left-width);
+        width: var(--sidebar-width);
         transition: left .3s ease 0s; /* left属性添加过渡动画 */
     }
 
@@ -78,7 +179,7 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
         position: absolute;
         top: 0;
         right: 0;
-        left: var(--left-width);
+        left: var(--sidebar-width);
         padding-left: 20px;
         padding-right: 10px;
         word-wrap: break-word;
@@ -87,51 +188,11 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     }
 
     .wrapper[data-state=article] .sidebar {
-        left: calc(-1 * var(--left-width));
+        left: calc(-1 * var(--sidebar-width));
     }
 
     .wrapper[data-state=article] .preview {
         left: 0;
         padding-left: 10px;
     }
-}
-
-.logo {
-    padding-left: 10px;
-    color: white;
-    background-color: #2983bb;
-}
-
-.div-for-nav {
-    /*TODO 设置高度*/
-    height: 100%;
-    overflow: auto;
-    background-color: black;
-    color: white;
-}
-
-.nav-list {
-    list-style-type: none;
-    padding-left: 1em;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    cursor: default;
-}
-
-/*导航栏的滚动条样式*/
-.div-for-nav::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-.div-for-nav::-webkit-scrollbar-thumb {
-    background: rgba(88, 88, 88, 0.3);
-}
-
-.div-for-nav::-webkit-scrollbar-thumb:hover {
-    background: #888888;
-}
-
-.div-for-nav::-webkit-scrollbar-track:hover {
-    background: rgba(88, 88, 88, 0.3);
 }
