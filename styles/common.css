@@ -48,24 +48,12 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     content: counter(line_number); /* 填充内容 */
 }
 
-.logo {
-    padding-left: 10px;
-    color: white;
-    background-color: #2983bb;
-}
-
 /*----- 目录树相关样式开始 -----*/
 
 /*导航目录树*/
 .nav-tree {
-    margin-block-start: 0;
-    margin-block-end: 0;
-    padding-inline-start: 0;
-
-    /*TODO 设置高度*/
-    height: 100%;
     overflow: auto;
-    background-color: #222222;
+    background-color: #303030;
     color: white;
 }
 
@@ -84,11 +72,17 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     line-height: 1.5em;
 }
 
-/*三角形符号，表示打开或关闭导航项*/
+/*导航项的显示内容*/
+.nav-tree-item > span:hover {
+    cursor: pointer;
+    color: blue;
+}
+
+/*子列表的展开/关闭标签*/
 .nav-tree-item-expander {
     position: absolute;
     top: 0;
-    left: -0.8em;
+    left: -0.7em;
     width: 0.6em;
     cursor: pointer;
 }
@@ -111,21 +105,20 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 }
 
 /*子项目打开时更改为下三角形*/
-.nav-tree-item._opened > .nav-tree-item-expander::before {
+.nav-tree-item._branch._opened > .nav-tree-item-expander::before {
     border-width: .23em;
     border-color: transparent white white transparent;
 }
 
 /*子列表默认不显示*/
-.nav-tree-item > .nav-tree-list {
+.nav-tree-item._branch > .nav-tree-list {
     display: none;
 }
 
 /*项目打开时显示子列表*/
-.nav-tree-item._opened > .nav-tree-list {
+.nav-tree-item._branch._opened > .nav-tree-list {
     display: block;
 }
-
 
 /*导航栏的滚动条样式*/
 .nav-tree::-webkit-scrollbar {
@@ -166,19 +159,34 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 
 /*适用于大屏幕*/
 @media screen and (min-width: 769px) {
+    /*侧边栏*/
     .sidebar {
-        position: fixed;
+        position: absolute;
         top: 0;
         bottom: 0;
         left: 0;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
         width: var(--sidebar-width);
         transition: left .3s ease 0s; /* left属性添加过渡动画 */
+    }
+
+    /*侧边栏的头部*/
+    .sidebar-header {
+        flex: 1 0 48px;
+        padding-left: 10px;
+        color: white;
+        background-color: #2983bb;
     }
 
     .preview {
         position: absolute;
         top: 0;
+        bottom: 0;
         right: 0;
+        overflow: auto;
         left: var(--sidebar-width);
         padding-left: 20px;
         padding-right: 10px;
@@ -187,11 +195,11 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
         transition: left .3s ease 0s; /* left属性添加过渡动画 */
     }
 
-    .wrapper[data-state=article] .sidebar {
+    .wrapper[data-state=only-preview] .sidebar {
         left: calc(-1 * var(--sidebar-width));
     }
 
-    .wrapper[data-state=article] .preview {
+    .wrapper[data-state=only-preview] .preview {
         left: 0;
         padding-left: 10px;
     }

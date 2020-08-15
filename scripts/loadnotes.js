@@ -86,25 +86,4 @@ function autoLoadMdFile() {
     );
 }
 
-window.onload = autoLoadMdFile;
-
-
-//TODO 删除
-function btn_click() {
-    /** @type {HTMLElement} */
-    let wrapper = document.querySelector(".wrapper[data-state]");
-    /** @type {string} */
-    let state = wrapper.getAttribute("data-state");
-    wrapper.setAttribute("data-state",
-        state === "default" ? "article" : "default");
-}
-
-//TODO 删除
-function ex_click() {
-    let t = document.querySelector("._branch");
-    if (t.classList.contains("_opened")) {
-        t.classList.remove("_opened");
-    } else {
-        t.classList.add("_opened");
-    }
-}
+window.addEventListener("load", autoLoadMdFile);
