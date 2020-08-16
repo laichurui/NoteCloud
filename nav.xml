@@ -1,0 +1,11 @@
+<notes>
+    <note-list name="网页">
+        <note-list name="css">
+            <note src="notes/css/css_basic.md">css基础入门</note>
+        </note-list>
+        <note-list name="javascript">
+            <note src="notes/js/highlight_guide.md">highlight.js使用说明</note>
+            <note src="notes/js/marked_guide.md">marked.js使用说明</note>
+        </note-list>
+    </note-list>
+</notes>

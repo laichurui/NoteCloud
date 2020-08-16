@@ -1,7 +1,4 @@
 :root {
-    /*侧边栏宽度*/
-    --sidebar-width: 280px;
-
     /**全局颜色*/
     --text-color-light: #888888;
 }
@@ -48,11 +45,21 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     content: counter(line_number); /* 填充内容 */
 }
 
+/*侧边栏的头部*/
+.sidebar-header {
+    flex: 0 0 48px;
+    padding-left: 10px;
+    color: white;
+    background-color: #2983bb;
+}
+
 /*----- 目录树相关样式开始 -----*/
 
 /*导航目录树*/
 .nav-tree {
+    flex: 1 0 auto;
     overflow: auto;
+    height: 0; /* 设为0才有滚动条，真是莫名其妙 */
     background-color: #303030;
     color: white;
 }
@@ -66,22 +73,31 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     cursor: default;
 }
 
+/*分支里的列表显示左边框*/
+.nav-tree-item._branch .nav-tree-list {
+    border-left: 1px dashed white;
+}
+
 /*导航项*/
 .nav-tree-item {
     position: relative;
-    line-height: 1.5em;
+    line-height: 2em;
 }
 
 /*导航项的显示内容*/
-.nav-tree-item > span:hover {
+.nav-tree-link:hover {
     cursor: pointer;
+    color: blue;
+}
+
+.nav-tree-link._activate {
     color: blue;
 }
 
 /*子列表的展开/关闭标签*/
 .nav-tree-item-expander {
     position: absolute;
-    top: 0;
+    top: 0.3em;
     left: -0.7em;
     width: 0.6em;
     cursor: pointer;
@@ -140,67 +156,82 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 
 /*----- 目录树相关样式结束 -----*/
 
+/*侧边栏*/
+.sidebar {
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+}
+
+/*预览栏*/
+.preview {
+    position: absolute;
+    overflow: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    word-wrap: break-word;
+    text-align: justify;
+}
+
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
-    /*页面左侧导航栏*/
+    /*侧边栏显示在顶部*/
     .sidebar {
-        width: 85%;
-        display: none;
+        top: -50%;
+        right: 0;
+        left: 0;
+        height: 50%;
+        transition: top .3s ease 0s; /* 添加过渡动画 */
     }
 
-    /*右侧预览标签*/
+    /*预览栏占满页面*/
     .preview {
-        padding-left: 10px;
-        padding-right: 10px;
-        word-wrap: break-word;
-        text-align: justify;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+
+    /*侧边栏从顶部滑入*/
+    .wrapper[data-state=fit] .sidebar {
+        top: 0;
     }
 }
 
+
 /*适用于大屏幕*/
 @media screen and (min-width: 769px) {
-    /*侧边栏*/
+    :root {
+        /*侧边栏宽度*/
+        --sidebar-width: 280px;
+    }
+
+    /*侧边栏显示在左边*/
     .sidebar {
-        position: absolute;
         top: 0;
         bottom: 0;
         left: 0;
-        overflow: hidden;
         height: 100%;
-        display: flex;
-        flex-direction: column;
         width: var(--sidebar-width);
         transition: left .3s ease 0s; /* left属性添加过渡动画 */
     }
 
-    /*侧边栏的头部*/
-    .sidebar-header {
-        flex: 1 0 48px;
-        padding-left: 10px;
-        color: white;
-        background-color: #2983bb;
-    }
-
+    /*预览栏显示在右边*/
     .preview {
-        position: absolute;
         top: 0;
         bottom: 0;
         right: 0;
-        overflow: auto;
         left: var(--sidebar-width);
-        padding-left: 20px;
-        padding-right: 10px;
-        word-wrap: break-word;
-        text-align: justify;
         transition: left .3s ease 0s; /* left属性添加过渡动画 */
     }
 
-    .wrapper[data-state=only-preview] .sidebar {
+    .wrapper[data-state=fit] .sidebar {
         left: calc(-1 * var(--sidebar-width));
     }
 
-    .wrapper[data-state=only-preview] .preview {
+    .wrapper[data-state=fit] .preview {
         left: 0;
-        padding-left: 10px;
     }
 }
