@@ -53,6 +53,25 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     background-color: #2983bb;
 }
 
+/*侧边栏调整大小的标签*/
+.resize-bar {
+    width: 6px;
+    cursor: ew-resize;
+    position: fixed;
+    left: calc(var(--sidebar-width) - 3px);
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    background-color: transparent;
+}
+
+.resize-bar._clicked {
+    cursor: col-resize;
+    left: 0;
+    right: 0;
+    width: auto;
+}
+
 /*----- 目录树相关样式开始 -----*/
 
 /*导航目录树*/
@@ -158,6 +177,7 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 
 /*侧边栏*/
 .sidebar {
+    word-break: keep-all;
     position: absolute;
     overflow: hidden;
     display: flex;
@@ -177,6 +197,11 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
+    /*不使用大小调整条*/
+    .resize-bar {
+        display: none;
+    }
+
     /*侧边栏显示在顶部*/
     .sidebar {
         top: -50%;
@@ -225,6 +250,11 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
         right: 0;
         left: var(--sidebar-width);
         transition: left .3s ease 0s; /* left属性添加过渡动画 */
+    }
+
+    .wrapper.no-transition .sidebar,
+    .wrapper.no-transition .preview {
+        transition: none;
     }
 
     .wrapper[data-state=fit] .sidebar {
