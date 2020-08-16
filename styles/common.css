@@ -257,10 +257,17 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
         transition: none;
     }
 
+    /*隐藏侧边栏*/
     .wrapper[data-state=fit] .sidebar {
         left: calc(-1 * var(--sidebar-width));
     }
 
+    /*隐藏大小调整条*/
+    .wrapper[data-state=fit] .resize-bar {
+        display: none;
+    }
+
+    /*预览栏占满页面*/
     .wrapper[data-state=fit] .preview {
         left: 0;
     }

@@ -109,10 +109,21 @@ function fillNavTree(notes,
 
         let displayName = document.createElement("span");
         li.appendChild(displayName);
+        displayName.addEventListener("mouseover", () => {
+            let avatar = document.createElement("span");
+            avatar.innerText = displayName.innerText;
+            avatar.style.position = "fixed";
+            avatar.style.left = displayName.getBoundingClientRect().left + "px";
+            avatar.style.top = displayName.getBoundingClientRect().top + "px";
+            avatar.style.zIndex = "3";
+            avatar.style.color = "white";
+            document.body.appendChild(avatar);
+        });
 
         if (n.tagName === "note") {
             displayName.classList.add("nav-tree-link");
             displayName.innerHTML = n.innerHTML;
+            displayName.title = displayName.innerText;
             displayName.setAttribute("data-src", n.getAttribute("src"));
 
             //点击后进入选中状态
@@ -130,6 +141,7 @@ function fillNavTree(notes,
         } else if (n.tagName === "note-list") {
             li.classList.add("_branch");
             displayName.innerText = n.getAttribute("name");
+            displayName.title = displayName.innerText;
 
             //添加展开/关闭标签
             let expander = document.createElement("div");
