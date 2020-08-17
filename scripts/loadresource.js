@@ -169,9 +169,12 @@ function fillNavTree(notes,
     }
 }
 
-function loadXmlToNavTree() {
-    loadFile("nav.xml", req => fillNavTree(req.responseXML.documentElement.children));
-}
+// function loadXmlToNavTree() {
+//     loadFile("nav.xml", req => fillNavTree(req.responseXML.documentElement.children));
+// }
 
-window.addEventListener("load", loadXmlToNavTree);
+window.addEventListener("load", () => {
+    let t = document.querySelector(".nav-trees");
+    new NavTreeForNotes(t);
+});
 window.addEventListener("load", autoLoadMdFile);

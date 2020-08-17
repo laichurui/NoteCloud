@@ -1,0 +1,109 @@
+/*导航目录树*/
+.nav-tree {
+    flex: 1 0 auto;
+    overflow: auto;
+    height: 0; /* 设为0才有滚动条，真是莫名其妙 */
+    background-color: #303030;
+    color: white;
+}
+
+/*替身标签*/
+.avatar {
+    position: fixed;
+    background-color: inherit;
+    font-size: 100%;
+}
+
+/*导航列表，包含多个 .nav-tree-item */
+.nav-tree-list {
+    list-style-type: none;
+    padding-left: 1em;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    cursor: default;
+}
+
+/*分支里的列表显示左边框*/
+.nav-tree-item._branch .nav-tree-list {
+    border-left: 1px dashed white;
+}
+
+/*导航项*/
+.nav-tree-item {
+    position: relative;
+    line-height: 2em;
+}
+
+/*导航项的显示内容*/
+.nav-tree-link, .nav-tree-item > span {
+    font-size: 100%;
+}
+
+.nav-tree-link:hover {
+    cursor: pointer;
+    color: blue;
+}
+
+.nav-tree-link._activate {
+    color: blue;
+}
+
+/*子列表的展开/关闭标签*/
+.nav-tree-item-expander {
+    position: absolute;
+    top: 0.3em;
+    left: -0.7em;
+    width: 0.6em;
+    cursor: pointer;
+}
+
+/*右三角形*/
+.nav-tree-item-expander::before {
+    margin-top: .5em;
+    display: block;
+    width: 0;
+    height: 0;
+    border-width: .3em;
+    border-style: solid;
+    /*
+    设置左边框颜色
+    当 width,height 都为 0 时，左边框是三角形
+    */
+    border-color: transparent transparent transparent white;
+    /*必须设置 content 属性，否则无法显示这个元素*/
+    content: "";
+}
+
+/*子项目打开时更改为下三角形*/
+.nav-tree-item._branch._opened > .nav-tree-item-expander::before {
+    border-width: .23em;
+    border-color: transparent white white transparent;
+}
+
+/*子列表默认不显示*/
+.nav-tree-item._branch > .nav-tree-list {
+    display: none;
+}
+
+/*项目打开时显示子列表*/
+.nav-tree-item._branch._opened > .nav-tree-list {
+    display: block;
+}
+
+/*导航栏的滚动条样式*/
+.nav-tree::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.nav-tree::-webkit-scrollbar-thumb {
+    background: rgba(88, 88, 88, 0.3);
+}
+
+.nav-tree::-webkit-scrollbar-thumb:hover {
+    background: #888888;
+}
+
+.nav-tree::-webkit-scrollbar-track:hover {
+    background: rgba(88, 88, 88, 0.3);
+}
