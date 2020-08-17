@@ -1,3 +1,9 @@
+.avatar {
+    position: fixed;
+    background-color: inherit;
+    font-size: 100%;
+}
+
 :root {
     /**全局颜色*/
     --text-color-light: #888888;
@@ -104,6 +110,10 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 }
 
 /*导航项的显示内容*/
+.nav-tree-link, .nav-tree-item > span {
+    font-size: 100%;
+}
+
 .nav-tree-link:hover {
     cursor: pointer;
     color: blue;

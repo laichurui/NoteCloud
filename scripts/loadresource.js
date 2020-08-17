@@ -107,18 +107,22 @@ function fillNavTree(notes,
         let li = document.createElement("li");
         li.classList.add("nav-tree-item");
 
+        /** @type {HTMLSpanElement} */
         let displayName = document.createElement("span");
-        li.appendChild(displayName);
-        displayName.addEventListener("mouseover", () => {
-            let avatar = document.createElement("span");
-            avatar.innerText = displayName.innerText;
+        displayName.addEventListener("mouseenter", () => {
+            let avatar = document.querySelector(".avatar");
             avatar.style.position = "fixed";
-            avatar.style.left = displayName.getBoundingClientRect().left + "px";
-            avatar.style.top = displayName.getBoundingClientRect().top + "px";
-            avatar.style.zIndex = "3";
-            avatar.style.color = "white";
-            document.body.appendChild(avatar);
+            avatar.style.left = `${displayName.getBoundingClientRect().left}px`;
+            avatar.style.top = `${displayName.getBoundingClientRect().top}px`;
+            let css = document.defaultView.getComputedStyle(displayName);
+            avatar.style.color = css.color;
+            avatar.innerHTML = displayName.innerHTML;
         });
+        displayName.addEventListener("mouseout", () => {
+            let avatar = document.querySelector(".avatar");
+            avatar.innerHTML = null;
+        });
+        li.appendChild(displayName);
 
         if (n.tagName === "note") {
             displayName.classList.add("nav-tree-link");
