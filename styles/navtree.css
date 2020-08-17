@@ -5,6 +5,7 @@
     height: 0; /* 设为0才有滚动条，真是莫名其妙 */
     background-color: #303030;
     color: white;
+    font-size: 100%;
 }
 
 /*替身标签*/
@@ -35,7 +36,7 @@
 }
 
 /*导航项的显示内容*/
-.nav-tree-link, .nav-tree-item > span {
+.nav-tree-item span {
     font-size: 100%;
 }
 
