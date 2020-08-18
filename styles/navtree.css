@@ -5,14 +5,12 @@
     height: 0; /* 设为0才有滚动条，真是莫名其妙 */
     background-color: #303030;
     color: white;
-    font-size: 100%;
 }
 
 /*替身标签*/
 .avatar {
     position: fixed;
     background-color: inherit;
-    font-size: 100%;
 }
 
 /*导航列表，包含多个 .nav-tree-item */
@@ -37,11 +35,6 @@
 .nav-tree-item {
     position: relative;
     line-height: 40px;
-}
-
-/*导航项的显示内容*/
-.nav-tree-item span {
-    font-size: 100%;
 }
 
 .nav-tree-link:hover {
