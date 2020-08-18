@@ -127,6 +127,7 @@ function NavTree(treeRoot) {
 
         /** @type {HTMLSpanElement} */
         let displayName = document.createElement("span");
+        displayName.classList.add("nav-tree-item-content");
         displayName.innerText = displayContent;
         displayName.title = displayName.innerText;
 
@@ -181,7 +182,7 @@ function createNotesNavTree(treeRoot, notes, callback) {
 
         } else if (tag.tagName === "note") {
             let item = tree.createNavItem(tag.innerHTML, callback, parent);
-            item.querySelector("span").setAttribute(
+            item.querySelector(".nav-tree-item-content").setAttribute(
                 "data-src", tag.getAttribute("src"));
 
         } else if (tag.tagName === "note-list") {
