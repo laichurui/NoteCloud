@@ -60,8 +60,9 @@ function NavTree(treeRoot) {
      * @see hiddenAvatar
      */
     function summonAvatar() {
-        avatar.style.left = `${this.getBoundingClientRect().left}px`;
-        avatar.style.top = `${this.getBoundingClientRect().top}px`;
+        let p = this.parentElement;
+        avatar.style.left = `${p.getBoundingClientRect().left}px`;
+        avatar.style.top = `${p.getBoundingClientRect().top}px`;
 
         avatar.style.color =
             document.defaultView.getComputedStyle(this).color;

@@ -3,14 +3,21 @@
     flex: 1 0 auto;
     overflow: auto;
     height: 0; /* 设为0才有滚动条 */
-    background-color: #303030;
     color: white;
 }
 
 /*替身标签*/
 .avatar {
     position: fixed;
-    background-color: inherit;
+    padding-right: 5px;
+}
+
+.nav-tree, .avatar, .nav-tree-item-content {
+    background-color: #303030;
+}
+
+.avatar, .nav-tree-item, .nav-tree-item-content {
+    line-height: 2em;
 }
 
 /*导航列表，包含多个 .nav-tree-item */
@@ -20,27 +27,20 @@
     margin-block-start: 0;
     margin-block-end: 0;
     cursor: default;
-    background-color: inherit;
-}
-
-/*分支里的列表显示左边框*/
-.nav-tree-item._branch > .nav-tree-list {
-    border-left: 1px dashed transparent;
-}
-
-.nav-tree-item._branch:hover > .nav-tree-list {
-    border-left-color: white;
 }
 
 /*导航项*/
 .nav-tree-item {
     position: relative;
-    line-height: 40px;
-    background-color: inherit;
 }
 
-.nav-tree-item-content {
-    background-color: inherit;
+/*分支里的列表显示左边框*/
+._branch > .nav-tree-list {
+    border-left: 1px dashed transparent;
+}
+
+._branch:hover > .nav-tree-list {
+    border-left-color: white;
 }
 
 .nav-tree-link:hover {
