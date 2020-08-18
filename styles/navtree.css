@@ -2,7 +2,7 @@
 .nav-tree {
     flex: 1 0 auto;
     overflow: auto;
-    height: 0; /* 设为0才有滚动条，真是莫名其妙 */
+    height: 0; /* 设为0才有滚动条 */
     background-color: #303030;
     color: white;
 }
@@ -20,6 +20,7 @@
     margin-block-start: 0;
     margin-block-end: 0;
     cursor: default;
+    background-color: inherit;
 }
 
 /*分支里的列表显示左边框*/
@@ -35,6 +36,11 @@
 .nav-tree-item {
     position: relative;
     line-height: 40px;
+    background-color: inherit;
+}
+
+.nav-tree-item > span {
+    background-color: inherit;
 }
 
 .nav-tree-link:hover {
