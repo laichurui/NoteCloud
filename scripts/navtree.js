@@ -1,4 +1,10 @@
 /**
+ * @callback itemClickCallback
+ * @param {HTMLSpanElement} this 指向触发事件的标签
+ * @param {MouseEvent} event 鼠标事件
+ */
+
+/**
  * 导航树
  * @param {HTMLElement} treeRoot 根元素
  * @constructor
@@ -30,7 +36,7 @@ function NavTree(treeRoot) {
         ul.classList.add("nav-tree-list");
         this.treeRoot.appendChild(ul);
         return ul;
-    }.bind(this)())
+    }.bind(this)());
 
     /**
      * 替身标签，不要直接使用，
@@ -86,21 +92,34 @@ function NavTree(treeRoot) {
     }
 
     /**
-     * @callback itemClickCallBack
-     * @param {HTMLSpanElement} this
-     * @param {MouseEvent} event
+     * 创建展开/关闭标签
+     * @param {HTMLElement} parentElement 父标签
+     * @return {HTMLDivElement} 创建的 展开/关闭 标签
      */
+    function createExpander(parentElement) {
+        let expander = document.createElement("div");
+        expander.classList.add("nav-tree-item-expander");
+        expander.addEventListener("click", () => {
+            //切换展开/关闭状态
+            if (parentElement.classList.contains("_opened"))
+                parentElement.classList.remove("_opened");
+            else
+                parentElement.classList.add("_opened");
+        });
+        parentElement.prepend(expander);
+        return expander;
+    }
 
     /**
      * 创建导航项目
      * @param {string} displayContent 显示的文本
-     * @param {itemClickCallBack} clickCallback 标签点击事件
+     * @param {itemClickCallback} clickCallback 标签点击事件
      * @param {HTMLElement} parentElement
      * @return {HTMLLIElement}
      */
-    this.createNavItem = function (displayContent,
-                                   clickCallback = null,
-                                   parentElement = this.container) {
+    NavTree.prototype.createNavItem = function (displayContent,
+                                                clickCallback = null,
+                                                parentElement = this.container) {
         /** @type {HTMLLIElement} */
         let item = document.createElement("li");
         item.classList.add("nav-tree-item");
@@ -121,34 +140,15 @@ function NavTree(treeRoot) {
         item.appendChild(displayName);
 
         return item;
-    }
+    };
 
     /**
-     * 创建展开/关闭标签
-     * @param {HTMLElement} parentElement 父标签
-     * @return {HTMLDivElement} 创建的 展开/关闭 标签
-     */
-    function createExpander(parentElement) {
-        let expander = document.createElement("div");
-        expander.classList.add("nav-tree-item-expander");
-        expander.addEventListener("click", () => {
-            //切换展开/关闭状态
-            if (parentElement.classList.contains("_opened"))
-                parentElement.classList.remove("_opened");
-            else
-                parentElement.classList.add("_opened");
-        });
-        parentElement.prepend(expander);
-        return expander;
-    }
-
-    /**
-     * 创建导航列表，由多个导航项目组成
+     * 创建导航列表，可以包含多个导航项目
      * @param {string} displayContent 显示的文本
      * @param {HTMLElement} parentElement 父标签
      * @return {HTMLUListElement} 用于填充导航项目的标签
      */
-    this.createNavList = function (displayContent, parentElement = this.container) {
+    NavTree.prototype.createNavList = function (displayContent, parentElement = this.container) {
         /** @type {HTMLLIElement} */
         let item = this.createNavItem(displayContent, null, parentElement);
         item.classList.add("_branch");
@@ -161,33 +161,26 @@ function NavTree(treeRoot) {
         item.appendChild(ul);
 
         return ul;
-    }
+    };
 }
 
-
 /**
- * 把 notes 内容转化为 html 标签填入 fillTarget 中，注意：fillTarget原有的子标签不会被清除
- * @see loadXmlToNavTree
+ * 创建笔记导航树
+ * @param treeRoot 树根，导航树的父标签
+ * @param notes nav.xml中的notes节点
+ * @param {itemClickCallback} callback 导航项目被点击时的回调
  */
-function NavTreeForNotes(treeRoot) {
-    let tree = new NavTree(treeRoot);
+function createNotesNavTree(treeRoot, notes, callback) {
+    const tree = new NavTree(treeRoot);
 
-    this.url = "nav.xml";
-
-    function buildTree(tag, parent = this.container) {
+    // 递归创建树
+    (function buildTree(tag, parent) {
         if (tag.tagName === "notes") {
             for (let child of tag.children)
                 buildTree(child, parent);
 
         } else if (tag.tagName === "note") {
-            let item = tree.createNavItem(
-                tag.innerHTML,
-                function () {
-                    loadMdFileToElement(this.getAttribute("data-src"),
-                        document.querySelector(".preview"));
-                },
-                parent
-            );
+            let item = tree.createNavItem(tag.innerHTML, callback, parent);
             item.querySelector("span").setAttribute(
                 "data-src", tag.getAttribute("src"));
 
@@ -197,7 +190,5 @@ function NavTreeForNotes(treeRoot) {
                 buildTree(child, itemList);
             }
         }
-    }
-
-    loadFile(this.url, req => buildTree(req.responseXML.documentElement));
+    }(notes, tree.container));
 }

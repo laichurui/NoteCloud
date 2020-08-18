@@ -69,7 +69,7 @@ function fillMdToElement(content, element) {
 }
 
 /**
- * 加载 md 文件，并把内容填充进 .preview 元素
+ * 加载 md 文件，并把内容填充进 element 元素
  *
  * @param {string}      url     文件路径
  * @param {HTMLElement} element 标签
@@ -94,8 +94,30 @@ function autoLoadMdFile() {
     );
 }
 
-window.addEventListener("load", () => {
-    let t = document.querySelector(".nav-trees");
-    new NavTreeForNotes(t);
-});
+/**
+ * 加载 nav.xml 文件，根据文件内容生成笔记导航树
+ */
+function loadXmlToNavTree() {
+
+    /**
+     * 定义导航项目被点击的事件
+     */
+    function itemClick() {
+        loadMdFileToElement(
+            this.getAttribute("data-src"),
+            document.querySelector(".preview")
+        );
+    }
+
+    //加载文件，成功后创建目录树
+    loadFile("nav.xml",
+        req => createNotesNavTree(
+            document.querySelector(".notes-nav"),
+            req.responseXML.documentElement,
+            itemClick
+        )
+    );
+}
+
+window.addEventListener("load", loadXmlToNavTree);
 window.addEventListener("load", autoLoadMdFile);
