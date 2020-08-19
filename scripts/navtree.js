@@ -133,7 +133,7 @@ function NavTree(treeRoot) {
         displayName.title = displayName.innerText;
 
         displayName.addEventListener("mouseenter", summonAvatar);
-        displayName.addEventListener("mouseout", hiddenAvatar);
+        displayName.addEventListener("mouseleave", hiddenAvatar);
         if (clickCallback != null) {
             displayName.classList.add("nav-tree-link");
             displayName.addEventListener("click", onItemClick);
@@ -147,12 +147,15 @@ function NavTree(treeRoot) {
     /**
      * 创建导航列表，可以包含多个导航项目
      * @param {string} displayContent 显示的文本
+     * @param {itemClickCallback} clickCallback 标签点击事件
      * @param {HTMLElement} parentElement 父标签
      * @return {HTMLUListElement} 用于填充导航项目的标签
      */
-    NavTree.prototype.createNavList = function (displayContent, parentElement = this.container) {
+    NavTree.prototype.createNavList = function (displayContent,
+                                                clickCallback = null,
+                                                parentElement = this.container) {
         /** @type {HTMLLIElement} */
-        let item = this.createNavItem(displayContent, null, parentElement);
+        let item = this.createNavItem(displayContent, clickCallback, parentElement);
         item.classList.add("_branch");
 
         createExpander(item);
@@ -167,7 +170,7 @@ function NavTree(treeRoot) {
 }
 
 /**
- * 创建笔记导航树
+ * 创建笔记导航树，添加到 treeRoot 子标签中
  * @param treeRoot 树根，导航树的父标签
  * @param notes nav.xml中的notes节点
  * @param {itemClickCallback} callback 导航项目被点击时的回调
@@ -187,10 +190,67 @@ function createNotesNavTree(treeRoot, notes, callback) {
                 "data-src", tag.getAttribute("src"));
 
         } else if (tag.tagName === "note-list") {
-            let itemList = tree.createNavList(tag.getAttribute("name"), parent);
+            let itemList = tree.createNavList(
+                tag.getAttribute("name"),
+                null,
+                parent);
             for (let child of tag.children) {
                 buildTree(child, itemList);
             }
         }
     }(notes, tree.container));
+}
+
+/**
+ * 生成目录树，添加到 root 子标签
+ *
+ * 注意：root 已有的子标签不会被清除
+ * @param {HTMLElement} root 目录树的父标签
+ * @param {HTMLElement} article 需要生成目录的标签
+ */
+function createCatalogue(root, article) {
+    /** @type {NavTree} */
+    const tree = new NavTree(root);
+
+    /** @type {NodeList} */
+    let headers = article.querySelectorAll("h1,h2,h3,h4,h5,h6");
+
+    // 获取第 i 个标题的等级
+    function getLevel(i) {
+        return parseInt(headers[i].nodeName[1]);
+    }
+
+    // 判断第 i 个标题是否具有下级标题
+    function hasSubtitle(i) {
+        return headers[i + 1] != null &&
+            getLevel(i + 1) > getLevel(i);
+    }
+
+    // 获取第 i 个标题的父元素
+    function getParentElement(i) {
+        // 找到上一个级别的标题
+        for (let p = i - 1; p >= 0; p--) {
+            if (getLevel(p) < getLevel(i))
+                return headers[p].myElement;
+        }
+        return tree.container;
+    }
+
+    for (let i = 0; i < headers.length; i++) {
+        if (hasSubtitle(i)) {
+            headers[i].myElement = tree.createNavList(
+                headers[i].textContent,
+                null,
+                getParentElement(i));
+
+        } else {
+            headers[i].myElement = tree.createNavItem(
+                headers[i].textContent,
+                null,
+                getParentElement(i));
+        }
+    }
+    // 打开所有分支
+    tree.container.querySelectorAll("._branch").forEach(
+        (e) => e.classList.add("_opened"));
 }

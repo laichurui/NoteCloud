@@ -14,6 +14,7 @@
 
 .nav-tree, .avatar, .nav-tree-item-content {
     background-color: #303030;
+    white-space: nowrap;
 }
 
 .avatar, .nav-tree-item, .nav-tree-item-content {

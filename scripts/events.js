@@ -12,6 +12,12 @@ function switchState() {
     );
 }
 
+function showCatalogue() {
+    let d = document.querySelector(".notes-nav");
+    let p = document.querySelector(".preview");
+    createCatalogue(d, p);
+}
+
 /**
  * 鼠标按下事件
  */
@@ -53,6 +59,9 @@ function registerEvent() {
     /** @type {HTMLElement} */
     let test = document.getElementById("test");
     test.addEventListener("click", switchState);
+
+    let test2 = document.getElementById("test2");
+    test2.addEventListener("click", showCatalogue);
 
     /** @type {HTMLElement} */
     let resizeBar = document.querySelector(".resize-bar");
