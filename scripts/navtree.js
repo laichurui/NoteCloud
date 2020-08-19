@@ -23,6 +23,7 @@ function NavTree(treeRoot) {
      */
     this.treeRoot = (function () {
         treeRoot.classList.add("nav-tree");
+        treeRoot.addEventListener("scroll", hiddenAvatar, false);
         return treeRoot;
     }());
 
@@ -48,7 +49,7 @@ function NavTree(treeRoot) {
     const avatar = (function () {
         let avatar = document.createElement("span");
         avatar.classList.add("avatar");
-        this.treeRoot.prepend(avatar);
+        this.container.prepend(avatar);
 
         return avatar;
     }.bind(this)());
@@ -75,7 +76,8 @@ function NavTree(treeRoot) {
      * @see summonAvatar
      */
     function hiddenAvatar() {
-        avatar.innerHTML = null;
+        if (avatar.innerHTML)
+            avatar.innerHTML = null;
     }
 
     /**
