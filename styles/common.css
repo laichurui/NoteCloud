@@ -76,7 +76,7 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 .sidebar {
     word-break: keep-all;
     position: absolute;
-    overflow: visible;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     z-index: 1;
