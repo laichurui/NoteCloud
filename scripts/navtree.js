@@ -231,20 +231,20 @@ function createCatalogue(root, article) {
         // 找到上一个级别的标题
         for (let p = i - 1; p >= 0; p--) {
             if (getLevel(p) < getLevel(i))
-                return headers[p].myElement;
+                return headers[p].myRef;
         }
         return tree.container;
     }
 
     for (let i = 0; i < headers.length; i++) {
         if (hasSubtitle(i)) {
-            headers[i].myElement = tree.createNavList(
+            headers[i].myRef = tree.createNavList(
                 headers[i].textContent,
                 null,
                 getParentElement(i));
 
         } else {
-            headers[i].myElement = tree.createNavItem(
+            headers[i].myRef = tree.createNavItem(
                 headers[i].textContent,
                 null,
                 getParentElement(i));
