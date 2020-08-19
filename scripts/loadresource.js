@@ -75,7 +75,12 @@ function fillMdToElement(content, element) {
  * @param {HTMLElement} element 标签
  */
 function loadMdFileToElement(url, element) {
-    loadFile(url, req => fillMdToElement(req.responseText, element));
+    loadFile(url, req => {
+        fillMdToElement(req.responseText, element);
+        let e = document.querySelector(".url-display");
+        if (e)
+            e.innerHTML = url;
+    });
 }
 
 /**

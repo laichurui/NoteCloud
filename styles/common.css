@@ -86,10 +86,22 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
 .preview {
     position: absolute;
     overflow: auto;
-    padding-left: 10px;
-    padding-right: 10px;
     word-wrap: break-word;
     text-align: justify;
+}
+
+/*预览栏顶部*/
+.preview-header {
+    border-bottom: 1px solid gray;
+    line-height: 2em;
+    color: gray;
+    cursor: default;
+}
+
+/*文章内容显示区*/
+.article {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 /*适用于小屏幕*/
