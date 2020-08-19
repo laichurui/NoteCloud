@@ -7,7 +7,7 @@
 
     <!--代码样式-->
     <link rel="stylesheet" href="styles/code_styles/vs2015.min.css">
-    <!--自定义样式-->
+    <!--自定义css-->
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/navtree.css">
 
@@ -25,6 +25,7 @@
 
     <!--导航栏-->
     <div class="sidebar">
+        <button id="test" style="position: absolute;right: -30px">关闭</button>
         <div class="sidebar-header">
             <h1 style="margin: 0;">笔记云</h1>
         </div>
@@ -36,11 +37,14 @@
         <div class="resize-bar"></div>
     </div>
 
-    <button id="test" style="position: fixed;right: 30px;z-index: 1">关闭</button>
-    <button id="test2" style="position: fixed;right: 90px;z-index: 1">目录</button>
-
     <!--预览-->
-    <div class="preview" data-md-url="README.md"></div>
+    <div class="preview">
+        <div class="preview-header">
+            <button id="test2" style="z-index: 1">目录</button>
+            <span>hello world</span>
+        </div>
+        <div class="article" data-md-url="README.md"></div>
+    </div>
 
 </div>
 

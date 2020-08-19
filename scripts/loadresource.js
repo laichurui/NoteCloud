@@ -105,7 +105,7 @@ function loadXmlToNavTree() {
     function itemClick() {
         loadMdFileToElement(
             this.getAttribute("data-src"),
-            document.querySelector(".preview")
+            document.querySelector(".article")
         );
     }
 
