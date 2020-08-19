@@ -85,7 +85,7 @@ function NavTree(treeRoot) {
         //这里的 this 指向触发事件的元素
         //使用 thisOfNavTree 访问 NavTree 的属性
         if (!this.classList.contains("_activate")) {
-            let curActivate = thisOfNavTree.treeRoot.querySelector(".nav-tree-link._activate");
+            let curActivate = thisOfNavTree.container.querySelector(".nav-tree-link._activate");
             if (curActivate != null)
                 curActivate.classList.remove("_activate");
             this.classList.add("_activate");
@@ -236,17 +236,48 @@ function createCatalogue(root, article) {
         return tree.container;
     }
 
+    // 处理点击事件
+    function onClickHandle(positon) {
+        location.href = `#${positon}`;
+    }
+
+    /**
+     * 章节排序值
+     * @type {number[]}
+     */
+    let chIndex = [0];
+
     for (let i = 0; i < headers.length; i++) {
         if (hasSubtitle(i)) {
+            // 标题标签添加 id 属性
+            chIndex[chIndex.length - 1]++;
+            let id = `ch${chIndex.join(".")}`;
+            headers[i].setAttribute("id", id);
+            // 目录树中添加标题的索引
             headers[i].myRef = tree.createNavList(
                 headers[i].textContent,
-                null,
+                () => {
+                    onClickHandle(id)
+                },
                 getParentElement(i));
 
+            for (let j = 0; j < (getLevel(i + 1) - getLevel(i)); j++)
+                chIndex[chIndex.length] = 0; //添加元素
         } else {
+            if (i > 0) {
+                let j = getLevel(i - 1) - getLevel(i);
+                if (j > 0)
+                    chIndex.splice(-1, j);
+            }
+            chIndex[chIndex.length - 1]++;
+            let id = `ch${chIndex.join(".")}`;
+            headers[i].setAttribute("id", id);
+
             headers[i].myRef = tree.createNavItem(
                 headers[i].textContent,
-                null,
+                () => {
+                    onClickHandle(id)
+                },
                 getParentElement(i));
         }
     }
