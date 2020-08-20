@@ -26,10 +26,10 @@
     <!--导航栏-->
     <div class="sidebar" data-visible="notes">
         <div class="sidebar-header">
-            <h1 style="margin: 0;">笔记云</h1>
-            <div>
-                <button class="btn-show-notes">笔记</button>
-                <button class="btn-show-catalogue" id="test2">目录</button>
+            <h1>笔记云</h1>
+            <div class="sidebar-header-menu">
+                <span class="btn-show-notes" data-arg="notes">笔记</span>
+                <span class="btn-show-catalogue" data-arg="catalogue">目录</span>
             </div>
         </div>
 
@@ -45,7 +45,7 @@
     <!--预览-->
     <div class="preview">
         <div class="preview-header">
-            <button id="test">关闭</button>
+            <button id="btn_switch_wrapper_state">关闭</button>
             <span class="url-display"></span>
         </div>
         <div class="article" data-md-url="README.md"></div>

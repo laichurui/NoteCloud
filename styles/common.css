@@ -45,14 +45,6 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     content: counter(line_number); /* 填充内容 */
 }
 
-/*侧边栏的头部*/
-.sidebar-header {
-    flex: 0 0 48px;
-    padding-left: 10px;
-    color: white;
-    background-color: #2983bb;
-}
-
 /*侧边栏调整大小的标签*/
 .resize-bar {
     width: 6px;
@@ -82,15 +74,45 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     z-index: 1;
 }
 
+/*侧边栏的头部*/
+.sidebar-header {
+    flex: 0;
+    color: white;
+    background-color: #2983bb;
+    cursor: default;
+}
+
+.sidebar-header > h1 {
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+.sidebar-header-menu {
+    display: flex;
+}
+
+.btn-show-notes, .btn-show-catalogue {
+    flex: 1;
+    text-align: center;
+    padding: 5px;
+}
+
+.sidebar[data-visible=notes] .btn-show-notes,
+.sidebar[data-visible=catalogue] .btn-show-catalogue {
+    background-color: #303030;
+    border-radius: 5px 5px 0 0;
+}
+
+/*导航默认不显示*/
 .notes-nav, .catalogue-nav {
     display: none;
 }
 
-.sidebar[data-visible=notes] .notes-nav{
-    display: block;
-}
-
-.sidebar[data-visible=catalogue] .catalogue-nav{
+/*侧边栏显示目录或笔记导航*/
+.sidebar[data-visible=notes] .notes-nav,
+.sidebar[data-visible=catalogue] .catalogue-nav {
     display: block;
 }
 
@@ -108,6 +130,12 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     line-height: 2em;
     color: gray;
     cursor: default;
+    padding-left: 10px;
+}
+
+#btn_switch_wrapper_state{
+    position: absolute;
+    z-index: 10;
 }
 
 /*文章内容显示区*/
@@ -129,6 +157,7 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
         right: 0;
         left: 0;
         height: 50%;
+        border-radius: 0 0 5px 5px;
         transition: top .3s ease 0s; /* 添加过渡动画 */
     }
 
