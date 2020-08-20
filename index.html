@@ -24,13 +24,19 @@
 <div class="wrapper" data-state="default">
 
     <!--导航栏-->
-    <div class="sidebar">
+    <div class="sidebar" data-visible="notes">
         <div class="sidebar-header">
             <h1 style="margin: 0;">笔记云</h1>
+            <div>
+                <button class="btn-show-notes">笔记</button>
+                <button class="btn-show-catalogue" id="test2">目录</button>
+            </div>
         </div>
 
         <!--笔记导航树-->
         <div class="notes-nav"></div>
+        <!--目录导航树-->
+        <div class="catalogue-nav"></div>
 
         <!--用于调整导航栏的大小-->
         <div class="resize-bar"></div>
@@ -40,7 +46,6 @@
     <div class="preview">
         <div class="preview-header">
             <button id="test">关闭</button>
-            <button id="test2">目录</button>
             <span class="url-display"></span>
         </div>
         <div class="article" data-md-url="README.md"></div>

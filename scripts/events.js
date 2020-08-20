@@ -12,11 +12,6 @@ function switchState() {
     );
 }
 
-function showCatalogue() {
-    let d = document.querySelector(".notes-nav");
-    let p = document.querySelector(".preview");
-    createCatalogue(d, p);
-}
 
 /**
  * 鼠标按下事件
@@ -60,8 +55,19 @@ function registerEvent() {
     let test = document.getElementById("test");
     test.addEventListener("click", switchState);
 
-    let test2 = document.getElementById("test2");
-    test2.addEventListener("click", showCatalogue);
+    document.querySelector(".btn-show-catalogue").addEventListener(
+        "click", () => {
+            document.querySelector(".sidebar").setAttribute(
+                "data-visible", "catalogue");
+        }
+    );
+
+    document.querySelector(".btn-show-notes").addEventListener(
+        "click", () => {
+            document.querySelector(".sidebar").setAttribute(
+                "data-visible", "notes");
+        }
+    );
 
     /** @type {HTMLElement} */
     let resizeBar = document.querySelector(".resize-bar");

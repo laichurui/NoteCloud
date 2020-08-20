@@ -204,13 +204,15 @@ function createNotesNavTree(treeRoot, notes, callback) {
 }
 
 /**
- * 生成目录树，添加到 root 子标签
- *
- * 注意：root 已有的子标签不会被清除
+ * 生成目录树，并添加到 root 标签下
  * @param {HTMLElement} root 目录树的父标签
- * @param {HTMLElement} article 需要生成目录的标签
+ * @param {HTMLElement} article 需要生成目录的文章标签
+ * @param {boolean} option 可选项，true:清空 root 原有的内容再添加目录树，false:不清除原有内容
  */
-function createCatalogue(root, article) {
+function createCatalogue(root, article, option = false) {
+    if(option)
+        root.innerHTML=null;
+
     /** @type {NavTree} */
     const tree = new NavTree(root);
 

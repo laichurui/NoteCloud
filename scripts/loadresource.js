@@ -80,6 +80,11 @@ function loadMdFileToElement(url, element) {
         let e = document.querySelector(".url-display");
         if (e)
             e.innerHTML = url;
+
+        createCatalogue(
+            document.querySelector(".catalogue-nav"),
+            document.querySelector(".article"),
+            true);
     });
 }
 

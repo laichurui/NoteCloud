@@ -82,6 +82,18 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
     z-index: 1;
 }
 
+.notes-nav, .catalogue-nav {
+    display: none;
+}
+
+.sidebar[data-visible=notes] .notes-nav{
+    display: block;
+}
+
+.sidebar[data-visible=catalogue] .catalogue-nav{
+    display: block;
+}
+
 /*预览栏*/
 .preview {
     position: absolute;
