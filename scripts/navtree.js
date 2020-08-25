@@ -159,6 +159,7 @@ function NavTree(treeRoot) {
         /** @type {HTMLLIElement} */
         let item = this.createNavItem(displayContent, clickCallback, parentElement);
         item.classList.add("_branch");
+        item.classList.add("_opened"); // 默认打开
 
         createExpander(item);
 
@@ -210,8 +211,8 @@ function createNotesNavTree(treeRoot, notes, callback) {
  * @param {boolean} option 可选项，true:清空 root 原有的内容再添加目录树，false:不清除原有内容
  */
 function createCatalogue(root, article, option = false) {
-    if(option)
-        root.innerHTML=null;
+    if (option)
+        root.innerHTML = null;
 
     /** @type {NavTree} */
     const tree = new NavTree(root);
@@ -285,7 +286,4 @@ function createCatalogue(root, article, option = false) {
                 getParentElement(i));
         }
     }
-    // 打开所有分支
-    tree.container.querySelectorAll("._branch").forEach(
-        (e) => e.classList.add("_opened"));
 }

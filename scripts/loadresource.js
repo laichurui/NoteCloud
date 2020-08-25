@@ -71,63 +71,19 @@ function fillMdToElement(content, element) {
 /**
  * 加载 md 文件，并把内容填充进 element 元素
  *
+ * 加载后根据文件内容自动创建目录
+ *
  * @param {string}      url     文件路径
  * @param {HTMLElement} element 标签
+ * @param {HTMLElement} catalogueRoot 目录的根标签
  */
-function loadMdFileToElement(url, element) {
+function loadMdFileToElement(url, element, catalogueRoot) {
     loadFile(url, req => {
         fillMdToElement(req.responseText, element);
         let e = document.querySelector(".url-display");
         if (e)
             e.innerHTML = url;
 
-        createCatalogue(
-            document.querySelector(".catalogue-nav"),
-            document.querySelector(".article"),
-            true);
+        createCatalogue(catalogueRoot, element, true);
     });
 }
-
-/**
- * 自动加载 md 文件<br/>
- * 适用标签：设置了 `data-md-url` 属性的标签
- *
- * @see loadMdFileToElement
- */
-function autoLoadMdFile() {
-    document.querySelectorAll("[data-md-url]").forEach(
-        (element) => {
-            /** @type string */
-            let url = element.getAttribute("data-md-url");
-            loadMdFileToElement(url, element);
-        }
-    );
-}
-
-/**
- * 加载 nav.xml 文件，根据文件内容生成笔记导航树
- */
-function loadXmlToNavTree() {
-
-    /**
-     * 定义导航项目被点击的事件
-     */
-    function itemClick() {
-        loadMdFileToElement(
-            this.getAttribute("data-src"),
-            document.querySelector(".article")
-        );
-    }
-
-    //加载文件，成功后创建目录树
-    loadFile("nav.xml",
-        req => createNotesNavTree(
-            document.querySelector(".notes-nav"),
-            req.responseXML.documentElement,
-            itemClick
-        )
-    );
-}
-
-window.addEventListener("load", loadXmlToNavTree);
-window.addEventListener("load", autoLoadMdFile);
