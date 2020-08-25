@@ -242,8 +242,8 @@ function createCatalogue(root, article, option = false) {
     }
 
     // 处理点击事件
-    function onClickHandle(positon) {
-        location.href = `#${positon}`;
+    function onClickHandle(position) {
+        location.href = `#${position}`;
     }
 
     /**

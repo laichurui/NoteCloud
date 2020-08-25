@@ -53,31 +53,32 @@
 </div>
 
 <script>
-    //加载笔记导航树
-    loadFile("nav.xml",
-        req => createNotesNavTree(
-            document.querySelector(".notes-nav"),
-            req.responseXML.documentElement,
-            function () {
-                loadMdFileToElement(
-                    this.getAttribute("data-src"),
-                    document.querySelector(".article"),
-                    document.querySelector(".catalogue-nav")
-                )
-            }
-        )
-    );
-
     // 加载笔记内容
-    if (location.search)
-        loadMdFileToElement(
-            location.search.match(/(?<=[?&]article=).+?(?=&|$)/) || "README.md",
-            document.querySelector(".article"),
-            document.querySelector(".catalogue-nav"));
-    else
-        loadMdFileToElement("README.md",
-            document.querySelector(".article"),
-            document.querySelector(".catalogue-nav"));
+    let noteUrl = "README.md";
+    if (location.search) {
+        let m = location.search.match(/(?<=[?&]article=).+?(?=&|$)/);
+        if (m) noteUrl = m;
+    }
+    loadMdFileToElement(noteUrl,
+        document.querySelector(".article"),
+        document.querySelector(".catalogue-nav"));
+
+    //加载笔记导航树
+    loadFile("nav.xml", req => {
+            createNotesNavTree(
+                document.querySelector(".notes-nav"),
+                req.responseXML.documentElement,
+                function () {
+                    loadMdFileToElement(
+                        this.getAttribute("data-src"),
+                        document.querySelector(".article"),
+                        document.querySelector(".catalogue-nav"))
+                });
+            // 与 noteUrl 对应的导航标签进入激活状态
+            let e = document.querySelector(`.notes-nav span[data-src='${noteUrl}']`);
+            if (e) e.classList.add("_activate");
+        }
+    );
 </script>
 
 <script>

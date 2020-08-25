@@ -28,7 +28,7 @@ function loadFile(url, success) {
             if (request.status === 200) {
                 success(request);
             } else {
-                alert(`error code: ${request.status} \n url: ${url}`);
+                alert(`HTTP ERROR\n    error code: ${request.status}\n    url: ${url}`);
             }
         }
     };

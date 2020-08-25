@@ -6,6 +6,8 @@ asaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasaaaaaaaaaaaa
 
 ![图片说明](images/link.svg)
 
+跳转到其他笔记：[css入门](?article=notes/css/css_basic.md)
+
 a
 
 ```python
