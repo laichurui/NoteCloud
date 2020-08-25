@@ -79,9 +79,8 @@
 
 /*子项目打开时更改为下三角形*/
 .nav-tree-item._branch._opened > .nav-tree-item-expander::before {
-    margin-top: .2em;
-    border-width: .25em;
-    border-color: transparent white white transparent;
+    transform: rotate(45deg);
+    transform-origin: left bottom;
 }
 
 /*子列表默认不显示*/
