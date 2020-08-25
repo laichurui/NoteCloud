@@ -56,19 +56,17 @@
 /*子列表的展开/关闭标签*/
 .nav-tree-item-expander {
     position: absolute;
-    top: 6px;
-    left: -14px;
-    width: 12px;
+    top: .55em;
+    left: -.7em;
     cursor: pointer;
 }
 
 /*右三角形*/
 .nav-tree-item-expander::before {
-    margin-top: 10px;
     display: block;
     width: 0;
     height: 0;
-    border-width: 6px;
+    border-width: .4em;
     border-style: solid;
     /*
     设置左边框颜色
@@ -81,7 +79,8 @@
 
 /*子项目打开时更改为下三角形*/
 .nav-tree-item._branch._opened > .nav-tree-item-expander::before {
-    border-width: 4px;
+    margin-top: .2em;
+    border-width: .25em;
     border-color: transparent white white transparent;
 }
 

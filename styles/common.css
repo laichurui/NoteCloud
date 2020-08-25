@@ -162,7 +162,7 @@ pre > code[class*=hljs] > .line-number-rows > .line-number::before {
         right: 0;
         left: 0;
         height: 75%;
-        border-radius: 0 0 10px 10px;
+        border-radius: 0 0 20px 20px;
         transition: top .3s ease 0s; /* 添加过渡动画 */
     }
 
