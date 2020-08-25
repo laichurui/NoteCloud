@@ -1,9 +1,60 @@
+/*-----------颜色配置-----------*/
+
+/*导航目录树*/
+.nav-tree {
+    /*文本颜色*/
+    --text-color: #F2ECFF;
+
+    /*激活文本色*/
+    --text-color-activate: #6CB8F3;
+
+    /*背景色*/
+    --back-color-tree: #303030;
+
+    /*滚动条滑块颜色*/
+    --scrollbar-thumb-color: #C6C6C6;
+
+    color: var(--text-color);
+}
+
+/*三角形*/
+.nav-tree-item-expander::before {
+    /*
+    设置左边框颜色
+    当 width,height 都为 0 时，左边框是三角形
+    */
+    border-color: transparent transparent transparent var(--text-color);
+}
+
+.nav-tree, .avatar, .nav-tree-item-content {
+    background-color: var(--back-color-tree);
+}
+
+._branch:hover > .nav-tree-list {
+    border-left-color: var(--text-color);
+}
+
+.nav-tree-link:hover, .nav-tree-link._activate {
+    color: var(--text-color-activate);
+}
+
+/*滚动条滑块颜色*/
+.nav-tree::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
+}
+
+.nav-tree::-webkit-scrollbar-corner {
+    background: var(--back-color-tree);
+}
+
+/*---------颜色配置结束---------*/
+
+
 /*导航目录树*/
 .nav-tree {
     flex: 1 0 auto;
     overflow: auto;
     height: 0; /* 设为0才有滚动条 */
-    color: white;
 }
 
 /*替身标签*/
@@ -13,7 +64,6 @@
 }
 
 .nav-tree, .avatar, .nav-tree-item-content {
-    background-color: #303030;
     white-space: nowrap;
 }
 
@@ -35,22 +85,13 @@
     position: relative;
 }
 
-/*分支里的列表显示左边框*/
+/*分支里的列表设置左边框*/
 ._branch > .nav-tree-list {
     border-left: 1px dashed transparent;
 }
 
-._branch:hover > .nav-tree-list {
-    border-left-color: white;
-}
-
 .nav-tree-link:hover {
     cursor: pointer;
-    color: blue;
-}
-
-.nav-tree-link._activate {
-    color: blue;
 }
 
 /*子列表的展开/关闭标签*/
@@ -68,11 +109,6 @@
     height: 0;
     border-width: .4em;
     border-style: solid;
-    /*
-    设置左边框颜色
-    当 width,height 都为 0 时，左边框是三角形
-    */
-    border-color: transparent transparent transparent white;
     /*必须设置 content 属性，否则无法显示这个元素*/
     content: "";
 }
@@ -97,16 +133,4 @@
 .nav-tree::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-}
-
-.nav-tree::-webkit-scrollbar-thumb {
-    background: rgba(88, 88, 88, 0.3);
-}
-
-.nav-tree::-webkit-scrollbar-thumb:hover {
-    background: #888888;
-}
-
-.nav-tree::-webkit-scrollbar-track:hover {
-    background: rgba(88, 88, 88, 0.3);
 }
