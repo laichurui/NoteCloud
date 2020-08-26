@@ -1,6 +1,8 @@
 :root {
     --main-color: #2983bb;
 
+    --main-color-light: #D3F4FF;
+
     /*较暗文本色*/
     --text-color-light: #888888;
 
@@ -15,6 +17,24 @@
 }
 
 /*-----------颜色配置-----------*/
+
+table {
+    border-left: 1px solid var(--text-color-light);
+    border-top: 1px solid var(--text-color-light);
+}
+
+table th, table td {
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right: 1px solid var(--text-color-light);
+    border-bottom: 1px solid var(--text-color-light);
+}
+
+blockquote {
+    padding: 5px;
+    background-color: var(--main-color-light);
+    border-left: 5px solid var(--main-color);
+}
 
 /*代码的行号列*/
 pre > code[class*=hljs] > .line-number-rows {

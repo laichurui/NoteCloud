@@ -8,4 +8,5 @@
             <note src="notes/js/marked_guide.md">marked.js使用说明</note>
         </note-list>
     </note-list>
+    <note src="notes/markdown指南.md">markdown指南</note>
 </notes>
