@@ -34,6 +34,8 @@ blockquote {
     padding: 5px;
     background-color: var(--main-color-light);
     border-left: 5px solid var(--main-color);
+    margin-block-start: 10px;
+    margin-inline-start: 10px;
 }
 
 /*代码的行号列*/
@@ -56,6 +58,7 @@ pre > code[class*=hljs] > .line-number-rows {
 
 .preview {
     background-color: var(--back-color-preview);
+    padding-bottom: 10px;
 }
 
 .sidebar[data-visible=notes] .btn-show-notes,
