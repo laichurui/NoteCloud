@@ -218,7 +218,8 @@ function createCatalogue(root, article, option = false) {
     const tree = new NavTree(root);
 
     /** @type {NodeList} */
-    let headers = article.querySelectorAll("h1,h2,h3,h4,h5,h6");
+    let headers = article.querySelectorAll(
+        "h1:not([class~=notitle]),h2:not([class~=notitle]),h3:not([class~=notitle]),h4:not([class~=notitle]),h5:not([class~=notitle]),h6:not([class~=notitle])");
 
     // 获取第 i 个标题的等级
     function getLevel(i) {

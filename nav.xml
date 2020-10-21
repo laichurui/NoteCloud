@@ -1,12 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <notes>
-    <note-list name="网页">
-        <note-list name="css">
-            <note src="notes/css/css_basic.md">css基础入门</note>
-        </note-list>
-        <note-list name="javascript">
-            <note src="notes/js/highlight_guide.md">highlight.js使用说明</note>
-            <note src="notes/js/marked_guide.md">marked.js使用说明</note>
-        </note-list>
+    <note-list name="css">
+        <note src="notes\css\css_basic.md">css_basic.md</note>
     </note-list>
-    <note src="notes/markdown指南.md">markdown指南</note>
+    <note-list name="js">
+        <note src="notes\js\highlight_guide.md">highlight_guide.md</note>
+        <note src="notes\js\marked_guide.md">marked_guide.md</note>
+    </note-list>
+    <note src="notes\markdown简易入门.md">markdown简易入门.md</note>
 </notes>
