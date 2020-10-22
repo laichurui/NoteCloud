@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,height=device-height,Initial-scale=1">
@@ -7,6 +8,8 @@
 
     <!--代码样式-->
     <link rel="stylesheet" href="styles/code_styles/vs2015.min.css">
+    <!--字体图标-->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
     <!--自定义css-->
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/navtree.css">
@@ -18,6 +21,7 @@
     <script src="scripts/navtree.js"></script>
     <script src="scripts/loadresource.js"></script>
 </head>
+
 <body>
 
 <div class="wrapper" data-state="default">
@@ -44,8 +48,8 @@
     <!--预览-->
     <div class="preview">
         <div class="preview-header">
-            <div id="btn_switch_wrapper_state"></div>
-            <span class="url-display"></span>
+            <div id="btn_switch_wrapper_state" class="fa"></div>
+            <span class="url-display fa"></span>
         </div>
         <div class="article"></div>
     </div>
@@ -53,32 +57,33 @@
 </div>
 
 <script>
+    // 设置要加载的笔记文件的url地址
+    let noteUrl = (function () {
+        let m = location.search && location.search.match(/(?<=[?&]article=).+?(?=&|$)/);
+        return m && decodeURI(m) || "README.md";
+    }());
     // 加载笔记内容
-    let noteUrl = "README.md";
-    if (location.search) {
-        let m = location.search.match(/(?<=[?&]article=).+?(?=&|$)/);
-        if (m) noteUrl = m;
-    }
     loadMdFileToElement(noteUrl,
         document.querySelector(".article"),
         document.querySelector(".catalogue-nav"));
-
-    //加载笔记导航树
+    // 加载笔记导航树
     loadFile("nav.xml", req => {
-            createNotesNavTree(
-                document.querySelector(".notes-nav"),
-                req.responseXML.documentElement,
-                function () {
-                    loadMdFileToElement(
-                        this.getAttribute("data-src"),
-                        document.querySelector(".article"),
-                        document.querySelector(".catalogue-nav"))
-                });
-            // 与 noteUrl 对应的导航标签进入激活状态
-            let e = document.querySelector(`.notes-nav span[data-src='${noteUrl}']`);
-            if (e) e.classList.add("_activate");
-        }
-    );
+        createNotesNavTree(
+            document.querySelector(".notes-nav"),
+            req.responseXML.documentElement,
+            function () {
+                loadMdFileToElement(
+                    this.getAttribute("data-src"),
+                    document.querySelector(".article"),
+                    document.querySelector(".catalogue-nav"))
+            });
+        // 与 noteUrl 对应的导航标签进入激活状态
+        document.querySelectorAll(".notes-nav span[data-src]").forEach(e => {
+            if (e.getAttribute("data-src") == noteUrl)
+                e.classList.add("_activate");
+        });
+    });
+
 </script>
 
 <script>
@@ -101,11 +106,12 @@
                 this.getAttribute("data-arg"));
         }
 
-        // 侧边栏显示目录
+        // 鼠标悬停或单击目录栏时显示目录
+        /** @type {HTMLElement} */
         let c = document.querySelector(".btn-show-catalogue");
         c.addEventListener("click", changeVisible);
         c.addEventListener("mouseover", changeVisible);
-        // 侧边栏显示笔记导航
+        // 鼠标悬停或单击笔记栏时显示笔记导航
         c = document.querySelector(".btn-show-notes");
         c.addEventListener("click", changeVisible);
         c.addEventListener("mouseover", changeVisible);
@@ -129,8 +135,44 @@
                     "--sidebar-width", `${event.clientX}px`);
             }
         });
+
+        // 打开打印页
+        document.querySelector(".url-display").addEventListener("click", function () {
+            /** @type {string} */
+            let curUrl = location.href.substring(0, location.href.indexOf("?")) +
+                "?article=" +
+                this.innerText;
+
+            // 修改网页标题为当前文件名
+            document.title = this.innerText.substring(
+                this.innerText.lastIndexOf("/") + 1 || this.innerText.lastIndexOf("\\") + 1,
+                this.innerText.lastIndexOf('.'));
+            //目录部分去掉 展开/关闭 的三角形标签
+            document.querySelectorAll(".catalogue-nav .nav-tree-item-expander").forEach(
+                element => element.style.display = "none");
+            //目录去掉左侧虚线
+            document.querySelectorAll(".catalogue-nav .nav-tree-list").forEach(
+                element => element.style.borderLeft = "0");
+            //目录的最后加入换页符
+            let t = document.querySelector(".catalogue-nav > *:nth-last-child(1)")
+            if (t && t.style)
+                t.style.pageBreakAfter = "always";
+            //只留下目录和文章
+            document.body.innerHTML =
+                "<h1>目录</h1>" +
+                document.querySelector(".catalogue-nav").innerHTML +
+                document.querySelector(".article").innerHTML;
+            // 延迟打印，给样式加载预留时间
+            setTimeout(() => {
+                window.print();
+                location.href = curUrl
+            }, 200);
+        });
+
     })();
+
 </script>
 
 </body>
+
 </html>

@@ -81,8 +81,10 @@ function loadMdFileToElement(url, element, catalogueRoot) {
     loadFile(url, req => {
         fillMdToElement(req.responseText, element);
         let e = document.querySelector(".url-display");
-        if (e)
+        if (e) {
             e.innerHTML = url;
+            e.setAttribute("title", "打印 " + url);
+        }
 
         createCatalogue(catalogueRoot, element, true);
     });

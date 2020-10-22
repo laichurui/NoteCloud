@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <notes>
+    <note src="notes\BNF语法范式.md">BNF语法范式.md</note>
     <note-list name="css">
         <note src="notes\css\css_basic.md">css_basic.md</note>
     </note-list>
