@@ -43,26 +43,59 @@ function loadFile(url, success) {
 function fillMdToElement(content, element) {
     element.innerHTML = marked(content);
     element.querySelectorAll("code").forEach(
-        (block) => {
-            hljs.highlightBlock(block);
+        (codeBlock) => {
+            hljs.highlightBlock(codeBlock);
 
             // 在 "pre code" 标签中添加行号
-            if (block.parentElement != null &&
-                block.parentElement.tagName.toLowerCase() === "pre") {
+            if (codeBlock.parentElement != null &&
+                codeBlock.parentElement.tagName.toLowerCase() === "pre") {
 
-                /** @type {HTMLSpanElement} */
-                let lineNumbers = document.createElement("span");
-                lineNumbers.classList.add("line-number-rows");
-
-                /** @type {int} */
-                let line_count = block.innerHTML.split("\n").length;
-                for (let i = 1; i <= line_count; i++) {
-                    /** @type {HTMLSpanElement} */
+                /**
+                 * 代码块按换行符切割得到的数组
+                 * @type {string[]}
+                 */
+                let allLines = codeBlock.innerHTML.split("\n");
+                /**
+                 * 最大的行号宽度
+                 * @type {string|null}
+                 */
+                let maxNumWidth = null;
+                codeBlock.innerHTML = ""; // 先清空原来的内容
+                let i = allLines.length;
+                do {
+                    /**
+                     * 行号标签
+                     * @type {HTMLSpanElement}
+                     */
                     let num = document.createElement("span");
                     num.classList.add("line-number");
-                    lineNumbers.appendChild(num);
-                }
-                block.prepend(lineNumbers);
+                    num.innerText = i;
+
+                    /**
+                     * 代码内容标签
+                     * @type {HTMLSpanElement}
+                     */
+                    let code = document.createElement("span");
+                    code.innerHTML = allLines[i - 1];
+
+                    /**
+                     * 代表一行代码，由行号标签和代码内容标签组成
+                     * @type {HTMLDivElement}
+                     */
+                    let codeLine = document.createElement("div");
+                    codeLine.classList.add("code-line");
+                    codeLine.appendChild(num);
+                    codeLine.appendChild(code);
+
+                    codeBlock.prepend(codeLine);
+
+                    // 设置行号标签的宽度
+                    if (!maxNumWidth)
+                        maxNumWidth = `${num.getBoundingClientRect().width}px`;
+                    num.style.flexBasis = maxNumWidth;
+
+                    i--;
+                } while (i >= 1);
             }
         }
     );

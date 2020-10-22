@@ -153,9 +153,6 @@
             // 目录去掉左侧虚线
             document.querySelectorAll(".catalogue-nav .nav-tree-list").forEach(
                 element => element.style.borderLeft = "0");
-            // 文章中的代码不显示行号
-            document.querySelectorAll(".line-number-rows").forEach(
-                element => element.style.display = "none");
             // 代码太长时自动换行
             document.querySelectorAll("pre").forEach(element => {
                 element.style.whiteSpace = "pre-wrap";
