@@ -50,7 +50,7 @@ blockquote p:nth-last-child(1) {
 
 /*代码的行号列*/
 pre>code[class*=hljs]>.line-number-rows {
-    border-right: 1px solid var(--text-color-light);
+    border-right: 2px solid var(--text-color-light);
     color: var(--text-color-light);
 }
 
