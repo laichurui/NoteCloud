@@ -122,6 +122,7 @@ pre>code[class*=hljs] {
     font-size: 120%;
     display: block;
     border-radius: 5px;
+    border: 2px solid var(--text-color-light);
 }
 
 /*代码的行号列*/

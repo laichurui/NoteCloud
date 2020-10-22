@@ -7,7 +7,7 @@
     <title>笔记云</title>
 
     <!--代码样式-->
-    <link rel="stylesheet" href="styles/code_styles/vs2015.min.css">
+    <link rel="stylesheet" href="styles/code_styles/vs.min.css">
     <!--字体图标-->
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
     <!--自定义css-->
@@ -136,7 +136,7 @@
             }
         });
 
-        // 打开打印页
+        // 打印功能
         document.querySelector(".url-display").addEventListener("click", function () {
             /** @type {string} */
             let curUrl = location.href.substring(0, location.href.indexOf("?")) +
@@ -147,25 +147,22 @@
             document.title = this.innerText.substring(
                 this.innerText.lastIndexOf("/") + 1 || this.innerText.lastIndexOf("\\") + 1,
                 this.innerText.lastIndexOf('.'));
-            //目录部分去掉 展开/关闭 的三角形标签
+            // 目录部分去掉 展开/关闭 的三角形标签
             document.querySelectorAll(".catalogue-nav .nav-tree-item-expander").forEach(
                 element => element.style.display = "none");
-            //目录去掉左侧虚线
+            // 目录去掉左侧虚线
             document.querySelectorAll(".catalogue-nav .nav-tree-list").forEach(
                 element => element.style.borderLeft = "0");
-            //目录的最后加入换页符
-            let t = document.querySelector(".catalogue-nav > *:nth-last-child(1)")
-            if (t && t.style)
-                t.style.pageBreakAfter = "always";
-            //只留下目录和文章
+            // 只留下目录和文章
             document.body.innerHTML =
                 "<h1>目录</h1>" +
                 document.querySelector(".catalogue-nav").innerHTML +
+                "<div style='page-break-after: always'></div>" +
                 document.querySelector(".article").innerHTML;
             // 延迟打印，给样式加载预留时间
             setTimeout(() => {
                 window.print();
-                location.href = curUrl
+                location.href = curUrl; // 刷新
             }, 200);
         });
 
