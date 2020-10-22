@@ -17,15 +17,6 @@
     color: var(--text-color);
 }
 
-/*三角形*/
-.nav-tree-item-expander::before {
-    /*
-    设置左边框颜色
-    当 width,height 都为 0 时，左边框是三角形
-    */
-    border-color: transparent transparent transparent var(--text-color);
-}
-
 .nav-tree, .avatar, .nav-tree-item-content {
     background-color: var(--back-color-tree);
 }
@@ -94,29 +85,16 @@
     cursor: pointer;
 }
 
-/*子列表的展开/关闭标签*/
-.nav-tree-item-expander {
-    position: absolute;
-    top: .55em;
-    left: -.7em;
-    cursor: pointer;
-}
-
-/*右三角形*/
+/*子列表的展开/关闭标签，右三角形*/
 .nav-tree-item-expander::before {
-    display: block;
-    width: 0;
-    height: 0;
-    border-width: .4em;
-    border-style: solid;
-    /*必须设置 content 属性，否则无法显示这个元素*/
-    content: "";
+    cursor: pointer;
+    content: "\f105";
+    margin-right: 5px;
 }
 
 /*子项目打开时更改为下三角形*/
 .nav-tree-item._branch._opened > .nav-tree-item-expander::before {
-    transform: rotate(45deg);
-    transform-origin: left bottom;
+    content: "\f107";
 }
 
 /*子列表默认不显示*/

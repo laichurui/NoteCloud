@@ -61,13 +61,9 @@ function NavTree(treeRoot) {
      * @see hiddenAvatar
      */
     function summonAvatar() {
-        let p = this.parentElement;
-        avatar.style.left = `${p.getBoundingClientRect().left}px`;
-        avatar.style.top = `${p.getBoundingClientRect().top}px`;
-
-        avatar.style.color =
-            document.defaultView.getComputedStyle(this).color;
-
+        avatar.style.left = `${this.getBoundingClientRect().left}px`;
+        avatar.style.top = `${this.parentElement.getBoundingClientRect().top}px`;
+        avatar.style.color = document.defaultView.getComputedStyle(this).color;
         avatar.innerHTML = this.innerHTML;
     }
 
@@ -102,6 +98,7 @@ function NavTree(treeRoot) {
     function createExpander(parentElement) {
         let expander = document.createElement("div");
         expander.classList.add("nav-tree-item-expander");
+        expander.classList.add("fa");
         expander.addEventListener("click", () => {
             //切换展开/关闭状态
             if (parentElement.classList.contains("_opened"))
