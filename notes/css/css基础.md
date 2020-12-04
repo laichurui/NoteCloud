@@ -101,3 +101,31 @@
         hello world
     </div>
 </div>'></iframe>
+
+## 字体图标
+:before或者:after伪元素中的content属性可以设置字体图标。这里使用[font-awesome](https://www.bootcss.com/p/font-awesome/)图标举例：
+
+```html
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+
+<style type="text/css">
+    div::before {
+        content: "\f0eb";
+        font-size: 28px;
+    }
+</style>
+<div class="fa"></div>
+```
+
+效果:
+<iframe srcdoc='
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+
+<style type="text/css">
+    div::before {
+        content: "\f0eb";
+        font-size: 28px;
+    }
+</style>
+<div class="fa"></div>'></iframe>

@@ -270,7 +270,7 @@ function createCatalogue(root, article, option = false) {
             if (i > 0) {
                 let j = getLevel(i - 1) - getLevel(i);
                 if (j > 0)
-                    chIndex.splice(-1, j);
+                    chIndex.splice(-j, j);
             }
             chIndex[chIndex.length - 1]++;
             let id = `ch${chIndex.join(".")}`;
