@@ -216,18 +216,6 @@ pre > code[class*=hljs] {
     padding-right: 10px;
 }
 
-/*子目录的展开关闭标签的宽度*/
-.nav-tree-item-expander {
-    width: 18px;
-}
-/*
-目录中，没有下级目录时，需要与左侧间隔一定宽度
-实现同一级目录的对齐
-*/
-.nav-tree-item:not(._branch) {
-    left: 18px;
-}
-
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
 
