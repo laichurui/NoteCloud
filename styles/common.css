@@ -34,8 +34,8 @@ table td {
 blockquote {
     padding: 10px;
     background-color: var(--main-color-light);
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--main-color);
     border-left: 5px solid var(--main-color);
     margin-block-start: 1em;
     margin-inline-start: 1em;
