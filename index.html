@@ -67,16 +67,12 @@
         document.querySelector(".article"),
         document.querySelector(".catalogue-nav"));
     // 加载笔记导航树
-    fetch("nav.xml")
-        .then(res => res.text())
+    fetch("笔记.json")
+        .then(res => res.json())
         .then(data => {
-            const parser = new DOMParser();
-            return parser.parseFromString(data, "application/xml");
-        })
-        .then(xml => {
             createNotesNavTree(
                 document.querySelector(".notes-nav"),
-                xml.documentElement,
+                data,
                 function () {
                     loadMdFileToElement(
                         this.getAttribute("data-src"),

@@ -172,7 +172,7 @@ function NavTree(treeRoot) {
 /**
  * 创建笔记导航树，添加到 treeRoot 子标签中
  * @param treeRoot 树根，导航树的父标签
- * @param {JSON} notesJson nav.xml中的notes节点
+ * @param {Object} notesJson nav.xml中的notes节点
  * @param {itemClickCallback} callback 导航项目被点击时的回调
  */
 function createNotesNavTree(treeRoot, notesJson, callback) {
@@ -180,25 +180,26 @@ function createNotesNavTree(treeRoot, notesJson, callback) {
 
     // 递归创建树
     (function buildTree(tag, parent) {
-        if (tag.tagName === "notes") {
-            for (let child of tag.children)
+        if (Array.isArray(tag)) {
+            for (let child of tag)
                 buildTree(child, parent);
 
-        } else if (tag.tagName === "note") {
-            let item = tree.createNavItem(tag.innerHTML, callback, parent);
+        } else if (typeof tag === "string") {
+            var fileName = tag.replace(/^.*[\\\/]/, '');
+            let item = tree.createNavItem(fileName, callback, parent);
             item.querySelector(".nav-tree-item-content").setAttribute(
-                "data-src", tag.getAttribute("src"));
+                "data-src", tag);
 
-        } else if (tag.tagName === "note-list") {
+        } else {
+            let dirName = Object.keys(tag)[0];
             let itemList = tree.createNavList(
-                tag.getAttribute("name"),
+                dirName,
                 null,
                 parent);
-            for (let child of tag.children) {
+            for (let child of tag[dirName])
                 buildTree(child, itemList);
-            }
         }
-    }(notesJson, tree.container));
+    }(notesJson[0]["笔记"], tree.container));
 }
 
 /**

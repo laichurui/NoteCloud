@@ -20,6 +20,8 @@ function fillMdToElement(content, element) {
     element.innerHTML = marked(content);
     element.querySelectorAll("code").forEach(
         (codeBlock) => {
+            if (!codeBlock.classList.contains("hljs"))
+                codeBlock.classList.add("hljs");
             hljs.highlightBlock(codeBlock);
 
             // 在 "pre code" 标签中添加行号
