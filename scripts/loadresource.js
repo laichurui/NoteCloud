@@ -100,7 +100,6 @@ function loadMdFileToElement(url, element, catalogueRoot, success) {
         .then(data => {
             fillMdToElement(data, element);
 
-            element.getAttribute("data-click");
             let e = document.querySelector(".url-display");
             if (e) {
                 e.innerHTML = url;

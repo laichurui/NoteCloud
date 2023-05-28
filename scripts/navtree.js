@@ -250,39 +250,42 @@ function createCatalogue(root, article, option = false) {
      * @type {number[]}
      */
     let chIndex = [0];
+    for (let i = 0; i < getLevel(0); i++)
+        chIndex[i] = 0; //添加元素
 
     for (let i = 0; i < headers.length; i++) {
+        if (i > 0) {
+            let j = getLevel(i - 1) - getLevel(i);
+            if (j > 0)
+                chIndex.splice(-j, j);
+        }
+        chIndex[chIndex.length - 1]++;
+        let id = `ch${chIndex.join(".")}`;
+        headers[i].setAttribute("id", id);
+
         if (hasSubtitle(i)) {
-            // 标题标签添加 id 属性
-            chIndex[chIndex.length - 1]++;
-            let id = `ch${chIndex.join(".")}`;
-            headers[i].setAttribute("id", id);
             // 目录树中添加标题的索引
             headers[i].myRef = tree.createNavList(
                 headers[i].textContent,
-                () => {
-                    onClickHandle(id)
+                function () {
+                    onClickHandle(id);
+                    this.dispatchEvent(new CustomEvent("data-click"));
                 },
                 getParentElement(i));
 
             for (let j = 0; j < (getLevel(i + 1) - getLevel(i)); j++)
                 chIndex[chIndex.length] = 0; //添加元素
         } else {
-            if (i > 0) {
-                let j = getLevel(i - 1) - getLevel(i);
-                if (j > 0)
-                    chIndex.splice(-j, j);
-            }
-            chIndex[chIndex.length - 1]++;
-            let id = `ch${chIndex.join(".")}`;
-            headers[i].setAttribute("id", id);
-
             headers[i].myRef = tree.createNavItem(
                 headers[i].textContent,
-                () => {
-                    onClickHandle(id)
-                },
-                getParentElement(i));
+                function () {
+                    onClickHandle(id);
+                    this.dispatchEvent(new CustomEvent("data-click"));
+                }
+                ,
+                getParentElement(i)
+            )
+            ;
         }
     }
 }

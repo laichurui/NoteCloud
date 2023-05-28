@@ -78,7 +78,10 @@
                         this.getAttribute("data-src"),
                         document.querySelector(".article"),
                         document.querySelector(".catalogue-nav"),
-                        () => this.dispatchEvent(new CustomEvent("data-click")));
+                        () => {
+                            this.dispatchEvent(new CustomEvent("data-click"));
+                            document.querySelector(".preview").scrollTo({top: 0, behavior: 'smooth'});
+                        });
                 });
             // 与 noteUrl 对应的导航标签进入激活状态
             document.querySelectorAll(".notes-nav span[data-src]").forEach(e => {
