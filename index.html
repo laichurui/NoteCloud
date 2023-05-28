@@ -30,7 +30,6 @@
     <!--导航栏-->
     <div class="sidebar" data-visible="notes">
         <div class="sidebar-header">
-            <h1>笔记云</h1>
             <div class="sidebar-header-menu">
                 <span class="btn-show-notes" data-arg="notes">笔记</span>
                 <span class="btn-show-catalogue" data-arg="catalogue">目录</span>
@@ -68,22 +67,30 @@
         document.querySelector(".article"),
         document.querySelector(".catalogue-nav"));
     // 加载笔记导航树
-    loadFile("nav.xml", req => {
-        createNotesNavTree(
-            document.querySelector(".notes-nav"),
-            req.responseXML.documentElement,
-            function () {
-                loadMdFileToElement(
-                    this.getAttribute("data-src"),
-                    document.querySelector(".article"),
-                    document.querySelector(".catalogue-nav"))
+    fetch("nav.xml")
+        .then(res => res.text())
+        .then(data => {
+            const parser = new DOMParser();
+            return parser.parseFromString(data, "application/xml");
+        })
+        .then(xml => {
+            createNotesNavTree(
+                document.querySelector(".notes-nav"),
+                xml.documentElement,
+                function () {
+                    loadMdFileToElement(
+                        this.getAttribute("data-src"),
+                        document.querySelector(".article"),
+                        document.querySelector(".catalogue-nav"),
+                        () => this.dispatchEvent(new CustomEvent("data-click")));
+                });
+            // 与 noteUrl 对应的导航标签进入激活状态
+            document.querySelectorAll(".notes-nav span[data-src]").forEach(e => {
+                if (e.getAttribute("data-src") === noteUrl)
+                    e.dispatchEvent(new CustomEvent("data-click"));
             });
-        // 与 noteUrl 对应的导航标签进入激活状态
-        document.querySelectorAll(".notes-nav span[data-src]").forEach(e => {
-            if (e.getAttribute("data-src") == noteUrl)
-                e.classList.add("_activate");
-        });
-    });
+        })
+        .catch(alert);
 
 </script>
 

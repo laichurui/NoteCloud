@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>svg</title>
+    <style>
+        .signal_x {
+            background: no-repeat 100% 100%;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cellipse fill='%23ff0000' cx='10' cy='10' rx='10' ry='10'/%3e%3cpath fill='%23ffffff' transform='rotate(45,10,10)' d='M 4 12 a 2 2 0 0 1 0 -4 h 12 a 2 2 0 0 1 0 4 h -12 z M 8 4 a 2 2 0 0 1 4 0 v 12 a 2 2 0 0 1 -4 0 v -12 z'/%3e%3c/svg%3e");
+            display:inline-block
+        }
+
+        .signal_normal_size {
+            width: 200px;
+            height: 200px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div>
+        <span class="signal_x signal_normal_size" />
+    </div>
+</body>
+
+</html>

@@ -6,33 +6,9 @@
 
 
 /**
- * ajax 请求的回调函数类型
- * @callback requestCallback
- * @param {XMLHttpRequest} request 请求对象，通过其 responseText、responseXML 获取回应内容
+ * md 文件加载成功的回调
+ * @callback successCallback
  */
-
-/**
- * 使用 ajax 加载文件，加载成功后调用回调函数
- *
- * @param {string}          url     文件路径
- * @param {requestCallback} success 成功加载的回调
- */
-function loadFile(url, success) {
-    /** @type {XMLHttpRequest} */
-    let request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.send();
-
-    request.onreadystatechange = function () {
-        if (request.readyState === 4) {
-            if (request.status === 200) {
-                success(request);
-            } else {
-                alert(`HTTP ERROR\n    error code: ${request.status}\n    url: ${url}`);
-            }
-        }
-    };
-}
 
 /**
  * 把 markdown 文件的内容填充进 element 元素
@@ -109,16 +85,28 @@ function fillMdToElement(content, element) {
  * @param {string}      url     文件路径
  * @param {HTMLElement} element 标签
  * @param {HTMLElement} catalogueRoot 目录的根标签
+ * @param {successCallback} success 笔记导航树的链接
  */
-function loadMdFileToElement(url, element, catalogueRoot) {
-    loadFile(url, req => {
-        fillMdToElement(req.responseText, element);
-        let e = document.querySelector(".url-display");
-        if (e) {
-            e.innerHTML = url;
-            e.setAttribute("title", "打印 " + url);
-        }
+function loadMdFileToElement(url, element, catalogueRoot, success) {
+    fetch(url)
+        .then(req => {
+            if (req.ok)
+                return req.text();
+            else
+                throw new Error(`HTTP ERROR\n    error code: ${req.status}\n    url: ${url}`);
+        })
+        .then(data => {
+            fillMdToElement(data, element);
 
-        createCatalogue(catalogueRoot, element, true);
-    });
+            element.getAttribute("data-click");
+            let e = document.querySelector(".url-display");
+            if (e) {
+                e.innerHTML = url;
+                e.setAttribute("title", "打印 " + url);
+            }
+
+            createCatalogue(catalogueRoot, element, true);
+            success && success();
+        })
+        .catch(alert);
 }

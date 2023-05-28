@@ -135,7 +135,7 @@ function NavTree(treeRoot) {
         displayName.addEventListener("mouseleave", hiddenAvatar);
         if (clickCallback != null) {
             displayName.classList.add("nav-tree-link");
-            displayName.addEventListener("click", onItemClick);
+            displayName.addEventListener("data-click", onItemClick);
             displayName.addEventListener("click", clickCallback);
         }
         item.appendChild(displayName);
@@ -172,10 +172,10 @@ function NavTree(treeRoot) {
 /**
  * 创建笔记导航树，添加到 treeRoot 子标签中
  * @param treeRoot 树根，导航树的父标签
- * @param notes nav.xml中的notes节点
+ * @param {JSON} notesJson nav.xml中的notes节点
  * @param {itemClickCallback} callback 导航项目被点击时的回调
  */
-function createNotesNavTree(treeRoot, notes, callback) {
+function createNotesNavTree(treeRoot, notesJson, callback) {
     const tree = new NavTree(treeRoot);
 
     // 递归创建树
@@ -198,7 +198,7 @@ function createNotesNavTree(treeRoot, notes, callback) {
                 buildTree(child, itemList);
             }
         }
-    }(notes, tree.container));
+    }(notesJson, tree.container));
 }
 
 /**
