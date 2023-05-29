@@ -77,7 +77,7 @@ function NavTree(treeRoot) {
     }
 
     /**
-     * 项目被点击时进入激活状态，绑定到 click 事件
+     * 项目被点击时进入激活状态，高亮显示
      */
     function onItemClick() {
         //这里的 this 指向触发事件的元素
@@ -242,7 +242,15 @@ function createCatalogue(root, article, option = false) {
 
     // 处理点击事件
     function onClickHandle(position) {
-        location.href = `#${position}`;
+        /** @type{HTMLElement} */
+        let preview = document.querySelector(".preview");
+        /** @type{HTMLElement} */
+        let anchor = document.querySelector(`#${position.replaceAll(".", "\\.")}`);
+        preview.scrollTo({top: anchor.offsetTop - 20, behavior: "smooth"});
+        // 修改显示的网址但是不执行跳转
+        let url = window.location.href;
+        url = url.substring(0, url.lastIndexOf("#"));
+        window.history.pushState({}, 0, `${url}#${position}`);
     }
 
     /**
@@ -268,8 +276,7 @@ function createCatalogue(root, article, option = false) {
             headers[i].myRef = tree.createNavList(
                 headers[i].textContent,
                 function () {
-                    onClickHandle(id);
-                    this.dispatchEvent(new CustomEvent("data-click"));
+                    onClickHandle(id)
                 },
                 getParentElement(i));
 
@@ -279,13 +286,9 @@ function createCatalogue(root, article, option = false) {
             headers[i].myRef = tree.createNavItem(
                 headers[i].textContent,
                 function () {
-                    onClickHandle(id);
-                    this.dispatchEvent(new CustomEvent("data-click"));
-                }
-                ,
-                getParentElement(i)
-            )
-            ;
+                    onClickHandle(id)
+                },
+                getParentElement(i));
         }
     }
 }

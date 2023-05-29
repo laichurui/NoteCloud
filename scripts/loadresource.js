@@ -80,6 +80,38 @@ function fillMdToElement(content, element) {
 }
 
 /**
+ * 获取 element 相对于 offsetParent 的 offsetTop
+ * @param {HTMLElement} element
+ * @param {HTMLElement} offsetElement
+ * @returns {number} offsetTop的值
+ */
+function getOffsetTop(element, offsetElement) {
+    let offsetTop = 0;
+    do {
+        if (!isNaN(element.offsetTop))
+            offsetTop += element.offsetTop;
+        element = element.offsetParent;
+
+    } while (element !== offsetElement) ;
+    return offsetTop;
+}
+
+/**
+ * 判断 scrollableElement 的子元素 element 是否在可视窗口中
+ * @param {HTMLElement} element
+ * @param {HTMLElement} scrollableElement
+ * @returns {boolean} 是否在可视窗口中
+ */
+function isInViewPort(element, scrollableElement) {
+    // 获取可视窗口的高度。
+    // let screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+    let distance = getOffsetTop(element, scrollableElement) - scrollableElement.scrollTop;
+    // 判断标签是否在可视窗口
+    return distance >= -element.clientHeight && distance <= scrollableElement.clientHeight;
+}
+
+/**
  * 加载 md 文件，并把内容填充进 element 元素
  *
  * 加载后根据文件内容自动创建目录
@@ -107,6 +139,52 @@ function loadMdFileToElement(url, element, catalogueRoot, success) {
             }
 
             createCatalogue(catalogueRoot, element, true);
+
+            // 预览界面滚动时，目录的高亮节点同步更新
+            let preview = document.querySelector(".preview");
+            preview.addEventListener("scroll",
+                function () {
+                    let links = document.querySelectorAll(".article [id^=ch]");
+                    let hasLinkInView = false;
+                    /** @type{HTMLElement} */
+                    let anchor;
+
+                    for (let link of links) {
+                        // 出现在页面的第一个标题所对应的目录链接高亮化
+                        if (isInViewPort(link, this)) {
+                            hasLinkInView = true;
+                            anchor = link;
+                            break;
+                        }
+                    }
+                    if (!hasLinkInView)
+                        for (let i = 0; i < links.length; ++i) {
+                            if (links[i].offsetTop > this.scrollTop) {
+                                if (i - 1 < 0) {
+                                    document.querySelector(".catalogue-nav ._activate")
+                                        .classList.remove("_activate");
+                                    return;
+                                }
+                                anchor = links[i - 1];
+                                break;
+                            }
+                        }
+                    if (anchor.myRef.tagName === "LI")
+                        anchor = anchor.myRef.querySelector(".nav-tree-link");
+                    else
+                        anchor = anchor.myRef.previousSibling;
+                    anchor.dispatchEvent(new CustomEvent("data-click"));
+                    // 目录节点滚动到anchor的位置
+                    let catalogue = document.querySelector(".catalogue-nav");
+                    if (!isInViewPort(anchor, catalogue)) {
+                        let offsetTop = getOffsetTop(anchor, catalogue);
+                        let vcenter = offsetTop - catalogue.clientHeight / 2;
+                        catalogue.scrollTo({top: vcenter, behavior: "smooth"});
+                    }
+                });
+            // 第一个目录链接高亮
+            preview.dispatchEvent(new CustomEvent("scroll"));
+
             success && success();
         })
         .catch(alert);
