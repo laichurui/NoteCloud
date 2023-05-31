@@ -21,6 +21,10 @@
     <!--自定义js-->
     <script src="scripts/navtree.js"></script>
     <script src="scripts/loadresource.js"></script>
+
+    <!--弹窗消息相关-->
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1117508_wxidm5ry7od.css">
+    <link rel="stylesheet" href="styles/message.css">
 </head>
 
 <body>
@@ -56,6 +60,7 @@
 
 </div>
 
+<script src="scripts/message.js"></script>
 <script>
     // 设置要加载的笔记文件的url地址
     let noteUrl = (function () {
@@ -89,8 +94,7 @@
                     e.dispatchEvent(new CustomEvent("data-click"));
             });
         })
-        .catch(alert);
-
+        .catch(err => message.show(err, "error"));
 </script>
 
 <script>

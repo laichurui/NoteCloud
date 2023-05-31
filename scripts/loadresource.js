@@ -91,8 +91,7 @@ function getOffsetTop(element, offsetElement) {
         if (!isNaN(element.offsetTop))
             offsetTop += element.offsetTop;
         element = element.offsetParent;
-
-    } while (element !== offsetElement) ;
+    } while (element && element !== offsetElement) ;
     return offsetTop;
 }
 
@@ -187,5 +186,5 @@ function loadMdFileToElement(url, element, catalogueRoot, success) {
 
             success && success();
         })
-        .catch(alert);
+        .catch(err => message.show(err, "error"));
 }
