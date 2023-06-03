@@ -101,10 +101,7 @@ function NavTree(treeRoot) {
         expander.classList.add("fa");
         expander.addEventListener("click", () => {
             //切换展开/关闭状态
-            if (parentElement.classList.contains("_opened"))
-                parentElement.classList.remove("_opened");
-            else
-                parentElement.classList.add("_opened");
+            parentElement.classList.toggle("_opened");
         });
         parentElement.prepend(expander);
         return expander;
