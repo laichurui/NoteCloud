@@ -10,7 +10,7 @@
     <!--代码样式-->
     <link rel="stylesheet" href="styles/code_styles/vs.min.css">
     <!--字体图标-->
-    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="styles/fontawesome.css">
     <!--自定义css-->
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/navtree.css">
@@ -25,6 +25,7 @@
     <!--弹窗消息相关-->
     <link rel="stylesheet" href="http://at.alicdn.com/t/font_1117508_wxidm5ry7od.css">
     <link rel="stylesheet" href="styles/message.css">
+    <script src="scripts/message.js" defer></script>
 </head>
 
 <body>
@@ -52,15 +53,14 @@
     <!--预览-->
     <div class="preview">
         <div class="preview-header">
-            <div id="btn_switch_wrapper_state" class="fa"></div>
-            <span class="url-display fa"></span>
+            <div id="btn_switch_wrapper_state" class="fa-solid fa-navicon"></div>
+            <span class="url-display"></span>
         </div>
         <div class="article"></div>
     </div>
 
 </div>
 
-<script src="scripts/message.js"></script>
 <script>
     // 设置要加载的笔记文件的url地址
     let noteUrl = (function () {

@@ -78,6 +78,8 @@ blockquote p:nth-last-child(1) {
 
 /*侧边栏展开/关闭按钮*/
 #btn_switch_wrapper_state {
+    cursor: pointer;
+    padding: 2px;
     border-radius: 3px;
     color: var(--back-color-sidebar);
     border: 1px solid var(--back-color-sidebar);
@@ -97,6 +99,8 @@ blockquote p:nth-last-child(1) {
 
 /*打印图标*/
 .url-display::after {
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
     content: " \f02f";
 }
 
@@ -196,13 +200,6 @@ pre > code[class*=hljs] {
     line-height: 2em;
     cursor: default;
     padding-left: 10px;
-}
-
-/*打开/关闭侧边栏的按钮*/
-#btn_switch_wrapper_state::before {
-    cursor: pointer;
-    content: "\f0c9";
-    padding: 2px;
 }
 
 /*文章内容显示区*/
