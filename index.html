@@ -7,6 +7,8 @@
     <link rel="shortcut icon" href="images/favicon.png" type="image/png">
     <title>笔记云</title>
 
+    <!--boostrap美化页面-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <!--代码样式-->
     <link rel="stylesheet" href="styles/code_styles/vs.min.css">
     <!--字体图标-->
@@ -26,34 +28,42 @@
     <link rel="stylesheet" href="http://at.alicdn.com/t/font_1117508_wxidm5ry7od.css">
     <link rel="stylesheet" href="styles/message.css">
     <script src="scripts/message.js" defer></script>
+
+    <!--侧边栏-->
+    <link rel="stylesheet" href="styles/sortable.css">
+    <script src="scripts/sortable.js" defer></script>
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <script src="scripts/sidebar.js" defer></script>
 </head>
 
 <body>
 
 <div class="wrapper" data-state="default">
 
-    <!--导航栏-->
-    <div class="sidebar" data-visible="notes">
-        <div class="sidebar-header">
-            <div class="sidebar-header-menu">
-                <span class="btn-show-notes" data-arg="notes">笔记</span>
-                <span class="btn-show-catalogue" data-arg="catalogue">目录</span>
-            </div>
-        </div>
-
-        <!--笔记导航树-->
-        <div class="notes-nav"></div>
-        <!--目录导航树-->
-        <div class="catalogue-nav"></div>
-
-        <!--用于调整导航栏的大小-->
+    <!--左 侧边栏-->
+    <div class="sidebar left">
+        <ul class="sortable-list">
+            <li class="item selected" draggable="true" data-ref="notes-panel">
+                <i class="fa-regular fa-file"></i>
+            </li>
+        </ul>
+        <div id="notes-panel" class="panel notes-nav"></div>
+        <div class="resize-bar"></div>
+    </div>
+    <!--右 侧边栏-->
+    <div class="sidebar right">
+        <ul class="sortable-list">
+            <li class="item selected" draggable="true" data-ref="catalogue-panel">
+                <i class="fa-solid fa-list"></i>
+            </li>
+        </ul>
+        <div id="catalogue-panel" class="panel catalogue-nav"></div>
         <div class="resize-bar"></div>
     </div>
 
     <!--预览-->
     <div class="preview">
         <div class="preview-header">
-            <div id="btn_switch_wrapper_state" class="fa-solid fa-navicon"></div>
             <span class="url-display"></span>
         </div>
         <div class="article"></div>
@@ -61,6 +71,88 @@
 
 </div>
 
+<!--注册事件-->
+<script>
+    // 预览界面滚动时，目录的高亮节点同步更新
+    document.querySelector(".preview").addEventListener("scroll",
+        function () {
+            let links = document.querySelectorAll(".article [id^=ch]");
+            let hasLinkInView = false;
+            /** @type{HTMLElement} */
+            let anchor;
+
+            for (let link of links) {
+                // 出现在页面的第一个标题所对应的目录链接高亮化
+                if (isInViewPort(link, this)) {
+                    hasLinkInView = true;
+                    anchor = link;
+                    break;
+                }
+            }
+            if (!hasLinkInView)
+                for (let i = 0; i < links.length; ++i) {
+                    if (links[i].offsetTop > this.scrollTop) {
+                        if (i - 1 < 0) {
+                            document.querySelector(".catalogue-nav ._activate")
+                                .classList.remove("_activate");
+                            return;
+                        }
+                        anchor = links[i - 1];
+                        break;
+                    }
+                }
+            if (anchor.myRef.tagName === "LI")
+                anchor = anchor.myRef.querySelector(".nav-tree-link");
+            else
+                anchor = anchor.myRef.previousSibling;
+            anchor.dispatchEvent(new CustomEvent("data-click"));
+            // 目录节点滚动到anchor的位置
+            let catalogue = document.querySelector(".catalogue-nav");
+            if (!isInViewPort(anchor, catalogue)) {
+                let offsetTop = getOffsetTop(anchor, catalogue);
+                let vcenter = offsetTop - catalogue.clientHeight / 2;
+                catalogue.scrollTo({top: vcenter, behavior: "smooth"});
+            }
+        });
+
+    // 打印功能
+    document.querySelector(".url-display").addEventListener("click", function () {
+        /** @type {string} */
+        let curUrl = `${location.href.substring(0, location.href.indexOf("?"))}?article=${this.innerText}`;
+
+        // 修改网页标题为当前文件名
+        document.title = this.innerText.substring(
+            this.innerText.lastIndexOf("/") + 1 || this.innerText.lastIndexOf("\\") + 1,
+            this.innerText.lastIndexOf('.'));
+        // 目录部分去掉 展开/关闭 的三角形标签
+        document.querySelectorAll(".catalogue-nav .nav-tree-item-expander").forEach(
+            element => element.style.visibility = "hidden");
+        // 目录去掉左侧虚线
+        document.querySelectorAll(".catalogue-nav .nav-tree-list").forEach(
+            element => element.style.borderLeft = "0");
+        // 代码太长时自动换行
+        document.querySelectorAll("pre").forEach(element => {
+            element.style.whiteSpace = "pre-wrap";
+            element.style.wordBreak = "break-all";
+        });
+        // 只留下目录和文章
+        document.body.innerHTML =
+            "<h1>目录</h1>" +
+            document.querySelector(".catalogue-nav").innerHTML +
+            "<div style='page-break-after: always'></div>" +
+            document.querySelector(".article").innerHTML;
+        // 延迟打印，给样式加载预留时间
+        setTimeout(() => {
+            window.print();
+            location.href = curUrl; // 刷新
+        }, 200);
+    });
+
+    window.addEventListener("error", err => message.show(err, "error"));
+    window.addEventListener("unhandledrejection", err => message.show(err.reason, "error"));
+</script>
+
+<!--加载笔记和目录-->
 <script>
     // 设置要加载的笔记文件的url地址
     let noteUrl = (function () {
@@ -94,96 +186,6 @@
                     e.dispatchEvent(new CustomEvent("data-click"));
             });
         })
-        .catch(err => message.show(err, "error"));
-</script>
-
-<script>
-    // 注册事件
-    (function () {
-        // 打开或关闭侧边栏
-        document.getElementById("btn_switch_wrapper_state").addEventListener("click", () => {
-            let wrapper = document.querySelector(".wrapper");
-            let state = wrapper.getAttribute("data-state");
-            wrapper.setAttribute(
-                "data-state",
-                state == null || state === "default" ? "fit" : "default"
-            );
-        });
-
-        // 设置目录/笔记导航是否显示
-        function changeVisible() {
-            document.querySelector(".sidebar").setAttribute(
-                "data-visible",
-                this.getAttribute("data-arg"));
-        }
-
-        // 鼠标悬停或单击目录栏时显示目录
-        /** @type {HTMLElement} */
-        let c = document.querySelector(".btn-show-catalogue");
-        c.addEventListener("click", changeVisible);
-        c.addEventListener("mouseover", changeVisible);
-        // 鼠标悬停或单击笔记栏时显示笔记导航
-        c = document.querySelector(".btn-show-notes");
-        c.addEventListener("click", changeVisible);
-        c.addEventListener("mouseover", changeVisible);
-
-        // 拖拽调整侧边栏大小
-        /** @type {HTMLElement} */
-        let resizeBar = document.querySelector(".resize-bar");
-        resizeBar.addEventListener("mousedown", function () {
-            this.classList.add("_clicked");
-            //取消过渡动画
-            document.querySelector(".wrapper").classList.add("no-transition");
-        });
-        resizeBar.addEventListener("mouseup", function () {
-            this.classList.remove("_clicked");
-            //显示过渡动画
-            document.querySelector(".wrapper").classList.remove("no-transition");
-        });
-        resizeBar.addEventListener("mousemove", function (event) {
-            if (this.classList.contains("_clicked")) {
-                document.documentElement.style.setProperty(
-                    "--sidebar-width", `${event.clientX}px`);
-            }
-        });
-
-        // 打印功能
-        document.querySelector(".url-display").addEventListener("click", function () {
-            /** @type {string} */
-            let curUrl = location.href.substring(0, location.href.indexOf("?")) +
-                "?article=" +
-                this.innerText;
-
-            // 修改网页标题为当前文件名
-            document.title = this.innerText.substring(
-                this.innerText.lastIndexOf("/") + 1 || this.innerText.lastIndexOf("\\") + 1,
-                this.innerText.lastIndexOf('.'));
-            // 目录部分去掉 展开/关闭 的三角形标签
-            document.querySelectorAll(".catalogue-nav .nav-tree-item-expander").forEach(
-                element => element.style.display = "none");
-            // 目录去掉左侧虚线
-            document.querySelectorAll(".catalogue-nav .nav-tree-list").forEach(
-                element => element.style.borderLeft = "0");
-            // 代码太长时自动换行
-            document.querySelectorAll("pre").forEach(element => {
-                element.style.whiteSpace = "pre-wrap";
-                element.style.wordBreak = "break-all";
-            });
-            // 只留下目录和文章
-            document.body.innerHTML =
-                "<h1>目录</h1>" +
-                document.querySelector(".catalogue-nav").innerHTML +
-                "<div style='page-break-after: always'></div>" +
-                document.querySelector(".article").innerHTML;
-            // 延迟打印，给样式加载预留时间
-            setTimeout(() => {
-                window.print();
-                location.href = curUrl; // 刷新
-            }, 200);
-        });
-
-    })();
-
 </script>
 
 </body>

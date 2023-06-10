@@ -1,0 +1,75 @@
+:root {
+    --sortable-list-width: 45px;
+}
+
+ul.sortable-list {
+    width: var(--sortable-list-width, 45px);
+    height: 100vh;
+    padding: 5px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.sortable-list .item {
+    list-style: none;
+    align-items: center;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.item.dragging {
+    opacity: 0.6;
+}
+
+.item.dragging.out {
+    display: none;
+}
+
+ul.sortable-list .item.move-up {
+    animation: move-up .3s linear;
+}
+
+ul.sortable-list .item.move-down {
+    animation: move-down .3s linear;
+}
+
+ul.sortable-list .item.insert-up {
+    animation: insert .3s linear;
+    transform-origin: top;
+}
+
+ul.sortable-list .item.insert-down {
+    animation: insert .3s linear;
+    transform-origin: bottom;
+}
+
+@keyframes move-up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes move-down {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes insert {
+    from {
+        transform: scaleY(0);
+    }
+    to {
+        transform: scaleY(1);
+    }
+}

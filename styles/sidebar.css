@@ -1,0 +1,140 @@
+:root {
+    --left-panel-width: 220px;
+    --right-panel-width: 220px;
+}
+
+body {
+    margin: 0;
+}
+
+.sidebar {
+    display: flex;
+    width: var(--sortable-list-width, 45px);
+    overflow: hidden;
+}
+
+.sidebar:not(:has(.sortable-list .item)) {
+    display: none;
+}
+
+.wrapper:has(.sortable-list .item.dragging) .sidebar {
+    display: flex;
+}
+
+.wrapper:has(.sortable-list .item.dragging) .sidebar .sortable-list {
+    animation: bg-twink .5s linear alternate;
+    animation-iteration-count: infinite;
+}
+
+@keyframes bg-twink {
+    to {
+        background-color: var(--main-color-light, #D3F4FF);
+    }
+}
+
+.sidebar.left {
+    float: left;
+}
+
+.sidebar.right {
+    float: right;
+    flex-direction: row-reverse;
+}
+
+.sidebar .sortable-list .item {
+    color: dimgray;
+}
+
+.sidebar .sortable-list .item:hover {
+    background-color: lightgray;
+}
+
+.sidebar .sortable-list .item.selected {
+    background-color: var(--main-color, blue);
+    color: white;
+}
+
+.sidebar .panel {
+    display: none;
+    height: 100vh;
+}
+
+.sidebar.left .panel {
+    width: var(--left-panel-width, 220px);
+    border-right: 1px solid darkgray;
+}
+
+.sidebar.right .panel {
+    width: var(--right-panel-width, 220px);
+    border-left: 1px solid darkgray;
+}
+
+.sidebar:has(.item.selected[data-ref="notes-panel"]) #notes-panel {
+    display: block;
+}
+
+.sidebar:has(.item.selected[data-ref="catalogue-panel"]) #catalogue-panel {
+    display: block;
+}
+
+
+/*适用于小屏幕*/
+@media screen and (max-width: 768px) {
+    /*不使用大小调整条*/
+    .resize-bar {
+        display: none;
+    }
+
+    .sidebar.left .panel {
+        position: fixed;
+        width: 70%;
+        left: var(--sortable-list-width) !important;
+    }
+
+    .sidebar.right {
+        display: none !important;
+    }
+}
+
+
+/*适用于大屏幕*/
+@media screen and (min-width: 769px) {
+    .sidebar.left:has(.sortable-list .item.selected) {
+        width: calc(var(--sortable-list-width, 45px) + var(--left-panel-width, 220px));
+    }
+
+    .sidebar.right:has(.sortable-list .item.selected) {
+        width: calc(var(--sortable-list-width, 45px) + var(--right-panel-width, 220px));
+    }
+
+    /*侧边栏调整大小的标签*/
+    .resize-bar {
+        width: 6px;
+        cursor: ew-resize;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 2;
+        background-color: transparent;
+    }
+
+    /*隐藏大小调整条*/
+    .sidebar:not(:has(.item.selected)) .resize-bar {
+        display: none;
+    }
+
+    .sidebar.left .resize-bar {
+        left: calc(var(--sortable-list-width, 45px) + var(--left-panel-width, 220px) - 3px);
+    }
+
+    .sidebar.right .resize-bar {
+        right: calc(var(--sortable-list-width, 45px) + var(--right-panel-width, 220px) - 3px);
+    }
+
+    .sidebar .resize-bar._clicked {
+        cursor: col-resize;
+        left: 0;
+        right: 0;
+        width: auto;
+    }
+}

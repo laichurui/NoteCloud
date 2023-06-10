@@ -4,7 +4,7 @@ EBNF 全称 Extended Backus–Naur Form ( 扩展的巴科斯范式 )，是基于
 
 EBNF 参考：
 
-[本地](../static/EBNF.pdf)
+[本地](static/EBNF.pdf)
 
 [网络](https://www.cl.cam.ac.uk/~mgk25/iso-14977.pdf)
 

@@ -107,7 +107,7 @@ function isInViewPort(element, scrollableElement) {
 
     let distance = getOffsetTop(element, scrollableElement) - scrollableElement.scrollTop;
     // 判断标签是否在可视窗口
-    return distance >= -element.clientHeight && distance <= scrollableElement.clientHeight;
+    return distance >= -element.clientHeight && distance <= scrollableElement.clientHeight - 10;
 }
 
 /**
@@ -121,6 +121,11 @@ function isInViewPort(element, scrollableElement) {
  * @param {successCallback} success 笔记导航树的链接
  */
 function loadMdFileToElement(url, element, catalogueRoot, success) {
+    if (!url.endsWith("md")) { // 非 markdown 文件直接打开链接
+        window.open(url, "_blank");
+        return;
+    }
+
     fetch(url)
         .then(req => {
             if (req.ok)
@@ -139,52 +144,9 @@ function loadMdFileToElement(url, element, catalogueRoot, success) {
 
             createCatalogue(catalogueRoot, element, true);
 
-            // 预览界面滚动时，目录的高亮节点同步更新
-            let preview = document.querySelector(".preview");
-            preview.addEventListener("scroll",
-                function () {
-                    let links = document.querySelectorAll(".article [id^=ch]");
-                    let hasLinkInView = false;
-                    /** @type{HTMLElement} */
-                    let anchor;
-
-                    for (let link of links) {
-                        // 出现在页面的第一个标题所对应的目录链接高亮化
-                        if (isInViewPort(link, this)) {
-                            hasLinkInView = true;
-                            anchor = link;
-                            break;
-                        }
-                    }
-                    if (!hasLinkInView)
-                        for (let i = 0; i < links.length; ++i) {
-                            if (links[i].offsetTop > this.scrollTop) {
-                                if (i - 1 < 0) {
-                                    document.querySelector(".catalogue-nav ._activate")
-                                        .classList.remove("_activate");
-                                    return;
-                                }
-                                anchor = links[i - 1];
-                                break;
-                            }
-                        }
-                    if (anchor.myRef.tagName === "LI")
-                        anchor = anchor.myRef.querySelector(".nav-tree-link");
-                    else
-                        anchor = anchor.myRef.previousSibling;
-                    anchor.dispatchEvent(new CustomEvent("data-click"));
-                    // 目录节点滚动到anchor的位置
-                    let catalogue = document.querySelector(".catalogue-nav");
-                    if (!isInViewPort(anchor, catalogue)) {
-                        let offsetTop = getOffsetTop(anchor, catalogue);
-                        let vcenter = offsetTop - catalogue.clientHeight / 2;
-                        catalogue.scrollTo({top: vcenter, behavior: "smooth"});
-                    }
-                });
             // 第一个目录链接高亮
-            preview.dispatchEvent(new CustomEvent("scroll"));
+            document.querySelector(".preview").dispatchEvent(new CustomEvent("scroll"));
 
             success && success();
-        })
-        .catch(err => message.show(err, "error"));
+        });
 }

@@ -1,20 +1,7 @@
-/*-----------颜色配置-----------*/
-
 /*导航目录树*/
 .nav-tree {
-    /*文本颜色*/
-    --text-color: #F2ECFF;
-
-    /*激活文本色*/
-    --text-color-activate: #6CB8F3;
-
-    /*背景色*/
-    --back-color-tree: #303030;
-
-    /*滚动条滑块颜色*/
-    --scrollbar-thumb-color: #C6C6C6;
-
-    color: var(--text-color);
+    --text-color: black;
+    --back-color-tree: white;
 }
 
 .nav-tree, .avatar, .nav-tree-item-content {
@@ -26,32 +13,18 @@
 }
 
 .nav-tree-link:hover, .nav-tree-link._activate {
-    color: var(--text-color-activate);
+    color: var(--main-color);
 }
-
-/*滚动条滑块颜色*/
-.nav-tree::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb-color);
-}
-
-.nav-tree::-webkit-scrollbar-corner {
-    background: var(--back-color-tree);
-}
-
-/*---------颜色配置结束---------*/
-
 
 /*导航目录树*/
 .nav-tree {
-    flex: 1 0 auto;
     overflow: auto;
-    height: 0; /* 设为0才有滚动条 */
 }
 
 /*替身标签*/
 .avatar {
     position: fixed;
-    padding-right: 5px;
+    border-radius: 3px;
 }
 
 .nav-tree, .avatar, .nav-tree-item-content {
@@ -65,10 +38,11 @@
 /*导航列表，包含多个 .nav-tree-item */
 .nav-tree-list {
     list-style-type: none;
-    padding-left: 20px;
+    padding-left: 18px;
     margin-block-start: 0;
     margin-block-end: 0;
     cursor: default;
+    width: fit-content;
 }
 
 /*导航项*/
@@ -96,6 +70,7 @@
 .nav-tree-item-expander {
     width: 18px;
 }
+
 /*
 目录中，没有下级目录时，需要与左侧间隔一定宽度
 实现同一级目录的对齐
@@ -120,7 +95,14 @@
 }
 
 /*导航栏的滚动条样式*/
-.nav-tree::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+.nav-tree::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+.nav-tree:hover::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color, #C6C6C6);
+}
+
+.nav-tree::-webkit-scrollbar-corner {
+    background: var(--back-color-tree);
 }

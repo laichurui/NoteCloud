@@ -1,19 +1,12 @@
 :root {
-    --main-color: #2983bb;
+    --main-color: blue;
 
     --main-color-light: #D3F4FF;
 
     /*较暗文本色*/
     --text-color-light: #888888;
 
-    /*侧边栏文本颜色*/
-    --text-color-sidebar: #F2ECFF;
-
-    /*侧边栏背景色*/
-    --back-color-sidebar: #303030;
-
-    /*预览栏背景*/
-    --back-color-preview: #F5F5DC;
+    --scrollbar-thumb-color: #C6C6C6;
 }
 
 /*-----------颜色配置-----------*/
@@ -29,24 +22,6 @@ table td {
     padding-right: 10px;
     border-right: 1px solid var(--text-color-light);
     border-bottom: 1px solid var(--text-color-light);
-}
-
-blockquote {
-    padding: 10px;
-    background-color: var(--main-color-light);
-    border-radius: 5px;
-    border: 1px solid var(--main-color);
-    border-left: 5px solid var(--main-color);
-    margin-block-start: 1em;
-    margin-inline-start: 1em;
-}
-
-blockquote p:nth-child(1) {
-    margin-block-start: 0;
-}
-
-blockquote p:nth-last-child(1) {
-    margin-block-end: 0;
 }
 
 /*代码的行号*/
@@ -65,30 +40,9 @@ blockquote p:nth-last-child(1) {
     display: flex;
 }
 
-/*侧边栏的头部*/
-.sidebar-header {
-    color: var(--text-color-sidebar);
-    background-color: var(--main-color);
-}
-
 /*预览栏顶部*/
 .preview-header {
     border-bottom: 1px solid var(--text-color-light);
-}
-
-/*侧边栏展开/关闭按钮*/
-#btn_switch_wrapper_state {
-    cursor: pointer;
-    padding: 2px;
-    border-radius: 3px;
-    color: var(--back-color-sidebar);
-    border: 1px solid var(--back-color-sidebar);
-    background-color: var(--back-color-preview);
-}
-
-#btn_switch_wrapper_state:hover {
-    color: var(--main-color);
-    border-color: var(--main-color);
 }
 
 /*文件名*/
@@ -109,20 +63,12 @@ blockquote p:nth-last-child(1) {
 }
 
 .preview {
-    background-color: var(--back-color-preview);
     padding-bottom: 10px;
-}
-
-.sidebar[data-visible=notes] .btn-show-notes,
-.sidebar[data-visible=catalogue] .btn-show-catalogue {
-    background-color: var(--back-color-sidebar);
+    height: 100vh;
+    box-sizing: border-box;
 }
 
 /*---------颜色配置结束---------*/
-
-body {
-    margin: 0;
-}
 
 /*代码高亮的单行 code 标签*/
 :not(pre) > code[class*=hljs] {
@@ -135,61 +81,13 @@ body {
 }
 
 pre > code[class*=hljs] {
-    font-size: 120%;
     display: block;
     border-radius: 5px;
     border: 2px solid var(--text-color-light);
-    padding-left: 0;
-}
-
-/*侧边栏*/
-.sidebar {
-    word-break: keep-all;
-    position: absolute;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-}
-
-/*侧边栏的头部*/
-.sidebar-header {
-    flex: 0;
-    cursor: default;
-}
-
-.sidebar-header-menu {
-    display: flex;
-}
-
-.btn-show-notes,
-.btn-show-catalogue {
-    flex: 1;
-    text-align: center;
-    padding: 5px;
-}
-
-.sidebar[data-visible=notes] .btn-show-notes,
-.sidebar[data-visible=catalogue] .btn-show-catalogue {
-    border-radius: 5px 5px 0 0;
-}
-
-/*导航默认不显示*/
-.notes-nav,
-.catalogue-nav {
-    display: none;
-    position: relative;
-}
-
-/*侧边栏显示目录或笔记导航*/
-.sidebar[data-visible=notes] .notes-nav,
-.sidebar[data-visible=catalogue] .catalogue-nav {
-    display: block;
 }
 
 /*预览栏*/
 .preview {
-    position: absolute;
     overflow: auto;
     word-wrap: break-word;
     text-align: justify;
@@ -200,31 +98,33 @@ pre > code[class*=hljs] {
     line-height: 2em;
     cursor: default;
     padding-left: 10px;
+    max-width: 60vw;
+    margin: auto;
 }
 
 /*文章内容显示区*/
 .article {
     padding-left: 10px;
     padding-right: 10px;
+    max-width: 60vw;
+    margin: auto;
+}
+
+/*滚动条样式*/
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
 }
 
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
-
-    /*不使用大小调整条*/
-    .resize-bar {
-        display: none;
-    }
-
-    /*侧边栏放置在顶部*/
-    .sidebar {
-        top: -75%;
-        right: 0;
-        left: 0;
-        height: 75%;
-        border-radius: 0 0 20px 20px;
-        transition: top .3s ease 0s;
-        /* 添加过渡动画 */
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
     }
 
     /*预览栏占满页面*/
@@ -235,84 +135,13 @@ pre > code[class*=hljs] {
         left: 0;
     }
 
-    /*侧边栏从顶部滑入*/
-    .wrapper[data-state=fit] .sidebar {
-        top: 0;
+    /*预览栏顶部*/
+    .preview-header {
+        max-width: 85vw;
     }
 
-    #btn_switch_wrapper_state {
-        position: fixed;
-        right: 10px;
-        top: 10px;
-        z-index: 2;
-    }
-}
-
-
-/*适用于大屏幕*/
-@media screen and (min-width: 769px) {
-    :root {
-        /*侧边栏宽度*/
-        --sidebar-width: 280px;
-    }
-
-    /*侧边栏显示在左边*/
-    .sidebar {
-        top: 0;
-        bottom: 0;
-        left: 0;
-        height: 100%;
-        width: var(--sidebar-width);
-        transition: left .3s ease 0s;
-        /* left属性添加过渡动画 */
-    }
-
-    /*侧边栏调整大小的标签*/
-    .resize-bar {
-        width: 6px;
-        cursor: ew-resize;
-        position: fixed;
-        left: calc(var(--sidebar-width) - 3px);
-        top: 0;
-        bottom: 0;
-        z-index: 2;
-        background-color: transparent;
-    }
-
-    .resize-bar._clicked {
-        cursor: col-resize;
-        left: 0;
-        right: 0;
-        width: auto;
-    }
-
-    /*预览栏显示在右边*/
-    .preview {
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: var(--sidebar-width);
-        transition: left .3s ease 0s;
-        /* left属性添加过渡动画 */
-    }
-
-    .wrapper.no-transition .sidebar,
-    .wrapper.no-transition .preview {
-        transition: none;
-    }
-
-    /*隐藏侧边栏*/
-    .wrapper[data-state=fit] .sidebar {
-        left: calc(-1 * var(--sidebar-width));
-    }
-
-    /*隐藏大小调整条*/
-    .wrapper[data-state=fit] .resize-bar {
-        display: none;
-    }
-
-    /*预览栏占满页面*/
-    .wrapper[data-state=fit] .preview {
-        left: 0;
+    /*文章内容显示区*/
+    .article {
+        max-width: 85vw;
     }
 }
