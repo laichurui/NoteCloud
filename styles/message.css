@@ -5,9 +5,11 @@
 
 #message-container {
     position: fixed;
-    left: 0;
     top: 0;
-    right: 0;
+    /*水平居中*/
+    left: 50%;
+    transform: translateX(-50%);
+
     z-index: 10;
 
     /* 采用flex弹性布局，让容器内部的所有消息可以水平居中，还能任意的调整宽度 */
@@ -20,7 +22,7 @@
     background: #fff;
     margin: 10px 0;
     padding: 0 10px;
-    height: 40px;
+    /*height: 40px;*/
     box-shadow: 0 0 10px 0 #eee;
     font-size: 14px;
     border-radius: 3px;
@@ -36,6 +38,7 @@
 #message-container .message .text {
     color: #333;
     padding: 0 20px 0 5px;
+    white-space: pre;
 }
 
 #message-container .message .text,
