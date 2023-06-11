@@ -134,6 +134,13 @@ function NavTree(treeRoot) {
             displayName.classList.add("nav-tree-link");
             displayName.addEventListener("data-click", onItemClick);
             displayName.addEventListener("click", clickCallback);
+            displayName.addEventListener("click", () => {
+                if (window.innerWidth < 769) {
+                    document.querySelector(".sidebar .sortable-list .item.selected")
+                        .classList
+                        .remove("selected");
+                }
+            });
         }
         item.appendChild(displayName);
 
