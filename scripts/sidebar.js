@@ -4,6 +4,11 @@ document.querySelectorAll(".sidebar .sortable-list .item").forEach(item => {
         if (activeItem && activeItem !== item)
             activeItem.classList.remove("selected");
         item.classList.toggle("selected");
+
+        // 更新目录中的高亮节点
+        if (item.matches(".selected[data-ref=catalogue-panel]")) {
+            document.querySelector(".preview").dispatchEvent(new CustomEvent("scroll"));
+        }
     });
     item.addEventListener("movetonewlist", e => {
         if (item.matches(".selected")) {
