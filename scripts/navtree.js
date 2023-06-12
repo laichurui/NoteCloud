@@ -261,18 +261,17 @@ function createCatalogue(root, article, option = false) {
      * 章节排序值
      * @type {number[]}
      */
-    let chIndex = [0];
-    for (let i = 0; i < getLevel(0); i++)
-        chIndex[i] = 0; //添加元素
+    let chIndex = new Array(6);
+    chIndex.fill(0);
 
     for (let i = 0; i < headers.length; i++) {
-        if (i > 0) {
-            let j = getLevel(i - 1) - getLevel(i);
-            if (j > 0)
-                chIndex.splice(-j, j);
-        }
-        chIndex[chIndex.length - 1]++;
-        let id = `ch${chIndex.join(".")}`;
+        let j = getLevel(i);
+        ++chIndex[j - 1];
+
+        if (i > 0 && getLevel(i - 1) - j > 0)
+            chIndex.fill(0, j);
+
+        let id = `ch${chIndex.slice(0, j).join(".")}`;
         headers[i].setAttribute("id", id);
 
         if (hasSubtitle(i)) {
@@ -283,9 +282,6 @@ function createCatalogue(root, article, option = false) {
                     onClickHandle(id)
                 },
                 getParentElement(i));
-
-            for (let j = 0; j < (getLevel(i + 1) - getLevel(i)); j++)
-                chIndex[chIndex.length] = 0; //添加元素
         } else {
             headers[i].myRef = tree.createNavItem(
                 headers[i].textContent,
