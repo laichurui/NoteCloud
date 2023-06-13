@@ -95,12 +95,12 @@
 }
 
 /*导航栏的滚动条样式*/
-.nav-tree::-webkit-scrollbar-thumb {
-    background: transparent;
+.nav-tree::-webkit-scrollbar {
+    display: none;
 }
 
-.nav-tree:hover::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb-color, #C6C6C6);
+.nav-tree:hover::-webkit-scrollbar {
+    display: block;
 }
 
 .nav-tree::-webkit-scrollbar-corner {

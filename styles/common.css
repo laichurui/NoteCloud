@@ -117,7 +117,10 @@ pre > code[class*=hljs] {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb-color);
+    border: 2px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    border-radius: 9999px;
+    background-color: var(--scrollbar-thumb-color);;
 }
 
 /*适用于小屏幕*/

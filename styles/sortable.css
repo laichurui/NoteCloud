@@ -11,6 +11,7 @@ ul.sortable-list {
 }
 
 .sortable-list .item {
+    width: 35px;
     list-style: none;
     align-items: center;
     border-radius: 5px;
