@@ -146,6 +146,7 @@ function loadMdFileToElement(url, element, catalogueRoot, success) {
 
             // 第一个目录链接高亮
             document.querySelector(".preview").dispatchEvent(new CustomEvent("scroll"));
+            document.querySelector(".preview").dispatchEvent(new CustomEvent("data-completed"));
 
             success && success();
         });

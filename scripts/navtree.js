@@ -23,7 +23,7 @@ function NavTree(treeRoot) {
      */
     this.treeRoot = (function () {
         treeRoot.classList.add("nav-tree");
-        treeRoot.addEventListener("scroll", hiddenAvatar, false);
+        treeRoot.onscroll = hiddenAvatar;
         return treeRoot;
     }());
 
@@ -204,6 +204,8 @@ function createNotesNavTree(treeRoot, notesJson, callback) {
                 buildTree(child, itemList);
         }
     }(notesJson[0]["笔记"], tree.container));
+
+    treeRoot.dispatchEvent(new CustomEvent("data-completed"));
 }
 
 /**
@@ -213,8 +215,10 @@ function createNotesNavTree(treeRoot, notesJson, callback) {
  * @param {boolean} option 可选项，true:清空 root 原有的内容再添加目录树，false:不清除原有内容
  */
 function createCatalogue(root, article, option = false) {
-    if (option)
-        root.innerHTML = null;
+    if (option) {
+        for (let i = 2; i < root.children.length; ++i)
+            root.children[i].remove();
+    }
 
     /** @type {NavTree} */
     const tree = new NavTree(root);
@@ -291,4 +295,6 @@ function createCatalogue(root, article, option = false) {
                 getParentElement(i));
         }
     }
+
+    root.dispatchEvent(new CustomEvent("data-completed"));
 }

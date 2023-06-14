@@ -57,6 +57,7 @@ body {
 .sidebar .panel {
     display: none;
     height: 100vh;
+    z-index: 1;
 }
 
 .sidebar.left .panel {
@@ -77,6 +78,9 @@ body {
     display: block;
 }
 
+.resize-bar {
+    z-index: 1;
+}
 
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
@@ -86,7 +90,7 @@ body {
     }
 
     .sidebar.left .panel {
-        position: fixed;
+        position: fixed !important;
         width: 70%;
         left: var(--sortable-list-width) !important;
     }

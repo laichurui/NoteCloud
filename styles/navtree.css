@@ -25,6 +25,8 @@
 .avatar {
     position: fixed;
     border-radius: 3px;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .nav-tree, .avatar, .nav-tree-item-content {
@@ -53,6 +55,11 @@
 /*分支里的列表设置左边框*/
 ._branch > .nav-tree-list {
     border-left: 1px dashed transparent;
+}
+
+.nav-tree-link,
+.nav-tree-item-content {
+    background-color: transparent;
 }
 
 .nav-tree-link:hover {
@@ -94,15 +101,10 @@
     display: block;
 }
 
-/*导航栏的滚动条样式*/
-.nav-tree::-webkit-scrollbar {
-    display: none;
+.nav-tree div[is$=scroll-bar] {
+    visibility: hidden;
 }
 
-.nav-tree:hover::-webkit-scrollbar {
-    display: block;
-}
-
-.nav-tree::-webkit-scrollbar-corner {
-    background: var(--back-color-tree);
+.nav-tree:hover div[is$=scroll-bar] {
+    visibility: visible;
 }

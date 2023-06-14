@@ -1,0 +1,27 @@
+div[is$=scroll-bar] {
+    position: absolute;
+    border-radius: 9999px;
+    box-sizing: border-box;
+    background-color: var(--scrollbar-thumb-color);
+    opacity: 0.6;
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+div[is=v-scroll-bar] {
+    margin-right: 2px;
+    right: 0;
+    width: 8px;
+    min-height: 20px;
+}
+
+div[is=h-scroll-bar] {
+    margin-bottom: 2px;
+    bottom: 0;
+    height: 8px;
+    min-width: 20px;
+}
+
+div[is$=scroll-bar].hide {
+    visibility: hidden !important;
+}

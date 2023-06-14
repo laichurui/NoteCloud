@@ -110,25 +110,17 @@ pre > code[class*=hljs] {
     margin: auto;
 }
 
-/*滚动条样式*/
+/*隐藏滚动条*/
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    display: none;
 }
 
-::-webkit-scrollbar-thumb {
-    border: 2px solid rgba(0, 0, 0, 0);
-    background-clip: padding-box;
-    border-radius: 9999px;
-    background-color: var(--scrollbar-thumb-color);;
+body {
+    scrollbar-width: none;
 }
 
 /*适用于小屏幕*/
 @media screen and (max-width: 768px) {
-    ::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
-    }
 
     /*预览栏占满页面*/
     .preview {
@@ -146,5 +138,9 @@ pre > code[class*=hljs] {
     /*文章内容显示区*/
     .article {
         max-width: 85vw;
+    }
+
+    .sidebar .panel {
+        z-index: 1;
     }
 }

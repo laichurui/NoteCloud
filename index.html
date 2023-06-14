@@ -35,6 +35,9 @@
     <script src="scripts/sortable.js" defer></script>
     <link rel="stylesheet" href="styles/sidebar.css">
     <script src="scripts/sidebar.js" defer></script>
+
+    <link rel="stylesheet" href="styles/scrollbar.css">
+    <script src="scripts/scrollbar.js" defer></script>
 </head>
 
 <body>
@@ -48,7 +51,10 @@
                 <i class="fa-regular fa-file"></i>
             </li>
         </ul>
-        <div id="notes-panel" class="panel notes-nav"></div>
+        <div id="notes-panel" class="panel notes-nav">
+            <div is="v-scroll-bar"></div>
+            <div is="h-scroll-bar"></div>
+        </div>
         <div class="resize-bar"></div>
     </div>
     <!--右 侧边栏-->
@@ -58,7 +64,10 @@
                 <i class="fa-solid fa-list"></i>
             </li>
         </ul>
-        <div id="catalogue-panel" class="panel catalogue-nav"></div>
+        <div id="catalogue-panel" class="panel catalogue-nav">
+            <div is="v-scroll-bar"></div>
+            <div is="h-scroll-bar"></div>
+        </div>
         <div class="resize-bar"></div>
     </div>
 
@@ -68,6 +77,8 @@
             <span class="url-display"></span>
         </div>
         <div class="article"></div>
+        <div is="v-scroll-bar"></div>
+        <div is="h-scroll-bar"></div>
     </div>
 
 </div>
@@ -95,8 +106,8 @@
                 for (i = 0; i < links.length; ++i) {
                     if (links[i].offsetTop > this.scrollTop) {
                         if (i - 1 < 0) {
-                            document.querySelector(".catalogue-nav ._activate")
-                                .classList.remove("_activate");
+                            let act = document.querySelector(".catalogue-nav ._activate");
+                            if (act) act.classList.remove("_activate");
                             return;
                         }
                         break;
@@ -176,6 +187,7 @@
                 document.querySelector(".notes-nav"),
                 data,
                 function () {
+                    // 点击链接时的回调
                     loadMdFileToElement(
                         this.getAttribute("data-src"),
                         document.querySelector(".article"),
