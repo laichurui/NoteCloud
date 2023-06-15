@@ -1,5 +1,5 @@
 class VScrollbar extends HTMLElement {
-    constructor(parentEl = null) {
+    constructor() {
         super();
 
         if (this.parentElement) {
@@ -8,15 +8,7 @@ class VScrollbar extends HTMLElement {
             });
             this.parentElement.addEventListener("scroll", () => {
                 this.style.top = `${this.calcTop()}px`;
-                this.style.right = `${-this.parentElement.scrollLeft}px`;
-            });
-        } else if (parentEl) {
-            parentEl.addEventListener("data-completed", () => {
-                setTimeout(() => this.init(), 100);
-            });
-            parentEl.addEventListener("scroll", () => {
-                this.style.top = `${this.calcTop()}px`;
-                this.style.right = `${-parentEl.scrollLeft}px`;
+                this.style.right = `${this.calcRight()}px`;
             });
         }
 
@@ -51,7 +43,11 @@ class VScrollbar extends HTMLElement {
             + this.parentElement.scrollTop
             / (this.parentElement.scrollHeight - this.parentElement.clientHeight)
             * (this.parentElement.clientHeight - this.calcHeight());
-        return Math.min(top, this.maxTop);
+        return Math.max(0, Math.min(top, this.maxTop));
+    }
+
+    calcRight() {
+        return Math.max(-this.parentElement.scrollLeft, this.minRight);
     }
 
     onResize() {
@@ -63,6 +59,7 @@ class VScrollbar extends HTMLElement {
             this.style.top = `${this.calcTop()}px`;
             this.style.height = `${this.calcHeight()}px`;
             this.maxTop = this.parentElement.scrollHeight - this.calcHeight();
+            this.minRight = this.parentElement.clientWidth - this.parentElement.scrollWidth;
         }
     }
 
@@ -96,13 +93,14 @@ class VScrollbar extends HTMLElement {
         }
     }
 
+    minRight = 0;
     maxTop = 0;
     preY;
     offset;
 }
 
 class HScrollbar extends HTMLElement {
-    constructor(parentEl = null) {
+    constructor() {
         super();
 
         if (this.parentElement) {
@@ -111,15 +109,7 @@ class HScrollbar extends HTMLElement {
             });
             this.parentElement.addEventListener("scroll", () => {
                 this.style.left = `${this.calcLeft()}px`;
-                this.style.bottom = `${-this.parentElement.scrollTop}px`;
-            });
-        } else if (parentEl) {
-            parentEl.addEventListener("data-completed", () => {
-                setTimeout(() => this.init(), 100);
-            });
-            parentEl.addEventListener("scroll", () => {
-                this.style.left = `${this.calcLeft()}px`;
-                this.style.bottom = `${-parentEl.scrollTop}px`;
+                this.style.bottom = `${this.calcBottom()}px`;
             });
         }
 
@@ -154,7 +144,11 @@ class HScrollbar extends HTMLElement {
             + this.parentElement.scrollLeft
             / (this.parentElement.scrollWidth - this.parentElement.clientWidth)
             * (this.parentElement.clientWidth - this.calcWidth());
-        return Math.min(left, this.maxleft);
+        return Math.max(0, Math.min(left, this.maxLeft));
+    }
+
+    calcBottom() {
+        return Math.max(-this.parentElement.scrollTop, this.minBottom);
     }
 
     onResize() {
@@ -167,7 +161,8 @@ class HScrollbar extends HTMLElement {
 
             this.style.left = `${this.calcLeft()}px`;
             this.style.width = `${this.calcWidth()}px`;
-            this.maxleft = this.parentElement.scrollWidth - this.calcWidth();
+            this.maxLeft = this.parentElement.scrollWidth - this.calcWidth();
+            this.minBottom = this.parentElement.clientHeight - this.parentElement.scrollHeight;
         }
     }
 
@@ -201,7 +196,8 @@ class HScrollbar extends HTMLElement {
         }
     }
 
-    maxleft = 0;
+    minBottom = 0;
+    maxLeft = 0;
     preX;
     offset;
 }

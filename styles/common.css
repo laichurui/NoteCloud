@@ -98,7 +98,7 @@ pre > code[class*=hljs] {
     line-height: 2em;
     cursor: default;
     padding-left: 10px;
-    max-width: 60vw;
+    max-width: 65vw;
     margin: auto;
 }
 
@@ -106,7 +106,7 @@ pre > code[class*=hljs] {
 .article {
     padding-left: 10px;
     padding-right: 10px;
-    max-width: 60vw;
+    max-width: 65vw;
     margin: auto;
 }
 
@@ -133,12 +133,12 @@ pre > code[class*=hljs] {
 
     /*预览栏顶部*/
     .preview-header {
-        max-width: 85vw;
+        max-width: 100%;
     }
 
     /*文章内容显示区*/
     .article {
-        max-width: 85vw;
+        max-width: 100%;
     }
 
     .sidebar .panel {
