@@ -1,4 +1,4 @@
-class VScrollbar extends HTMLDivElement {
+class VScrollbar extends HTMLElement {
     constructor(parentEl = null) {
         super();
 
@@ -47,10 +47,11 @@ class VScrollbar extends HTMLDivElement {
      * @returns {number} top值
      */
     calcTop() {
-        return this.parentElement.scrollTop
+        let top = this.parentElement.scrollTop
             + this.parentElement.scrollTop
             / (this.parentElement.scrollHeight - this.parentElement.clientHeight)
             * (this.parentElement.clientHeight - this.calcHeight());
+        return Math.min(top, this.maxTop);
     }
 
     onResize() {
@@ -61,6 +62,7 @@ class VScrollbar extends HTMLDivElement {
 
             this.style.top = `${this.calcTop()}px`;
             this.style.height = `${this.calcHeight()}px`;
+            this.maxTop = this.parentElement.scrollHeight - this.calcHeight();
         }
     }
 
@@ -94,11 +96,12 @@ class VScrollbar extends HTMLDivElement {
         }
     }
 
+    maxTop = 0;
     preY;
     offset;
 }
 
-class HScrollbar extends HTMLDivElement {
+class HScrollbar extends HTMLElement {
     constructor(parentEl = null) {
         super();
 
@@ -147,10 +150,11 @@ class HScrollbar extends HTMLDivElement {
      * @returns {number} left值
      */
     calcLeft() {
-        return this.parentElement.scrollLeft
+        let left = this.parentElement.scrollLeft
             + this.parentElement.scrollLeft
             / (this.parentElement.scrollWidth - this.parentElement.clientWidth)
             * (this.parentElement.clientWidth - this.calcWidth());
+        return Math.min(left, this.maxleft);
     }
 
     onResize() {
@@ -163,6 +167,7 @@ class HScrollbar extends HTMLDivElement {
 
             this.style.left = `${this.calcLeft()}px`;
             this.style.width = `${this.calcWidth()}px`;
+            this.maxleft = this.parentElement.scrollWidth - this.calcWidth();
         }
     }
 
@@ -196,20 +201,26 @@ class HScrollbar extends HTMLDivElement {
         }
     }
 
+    maxleft = 0;
     preX;
     offset;
 }
 
-customElements.define("v-scroll-bar", VScrollbar, {extends: "div"});
-customElements.define("h-scroll-bar", HScrollbar, {extends: "div"});
+customElements.define("v-scroll-bar", VScrollbar);
+customElements.define("h-scroll-bar", HScrollbar);
 
 const resizeObserver = new ResizeObserver(entries => {
     entries.forEach(entry => {
-        let hBar = entry.target.querySelector("div[is=h-scroll-bar]");
-        let vBar = entry.target.querySelector("div[is=v-scroll-bar]");
+        let hBar = entry.target.querySelector("h-scroll-bar");
+        let vBar = entry.target.querySelector("v-scroll-bar");
 
         if (hBar) hBar.style.display = "none";
         if (vBar) vBar.style.display = "none";
+
+        if (entry.target.scrollTop > entry.target.scrollHeight - entry.target.clientHeight)
+            entry.target.scrollTop = entry.target.scrollHeight - entry.target.clientHeight;
+        if (entry.target.scrollLeft > entry.target.scrollWidth - entry.target.clientWidth)
+            entry.target.scrollLeft = entry.target.scrollWidth - entry.target.clientWidth;
 
         if (hBar) hBar.onResize();
         if (vBar) vBar.onResize();
@@ -219,5 +230,5 @@ const resizeObserver = new ResizeObserver(entries => {
     });
 });
 
-document.querySelectorAll("*:has(>div[is$=scroll-bar])").forEach(
+document.querySelectorAll("*:has(:is(v-scroll-bar, h-scroll-bar))").forEach(
     el => resizeObserver.observe(el));

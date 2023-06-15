@@ -6,6 +6,10 @@
 1. 在笔记目录中新建 .md 文件
 2. 运行 GenerateNavJson，生成 笔记.json 文件
 
+推荐使用 chrome 浏览器。
+
+Firefox 浏览器需要打开 has 选择器支持，具体操作：地址栏输入 about:config，搜索 layout.css.has-selector.enabled 并设置为 true。
+
 ## 笔记格式
 
 笔记都是 markdown 文件，参考 [markdown指南](?article=笔记/markdown指南.md) 学习如何编辑md文件。

@@ -115,8 +115,9 @@ pre > code[class*=hljs] {
     display: none;
 }
 
-body {
+* {
     scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 /*适用于小屏幕*/

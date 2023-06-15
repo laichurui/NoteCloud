@@ -101,10 +101,10 @@
     display: block;
 }
 
-.nav-tree div[is$=scroll-bar] {
+.nav-tree :is(v-scroll-bar, h-scroll-bar) {
     visibility: hidden;
 }
 
-.nav-tree:hover div[is$=scroll-bar] {
+.nav-tree:hover :is(v-scroll-bar, h-scroll-bar) {
     visibility: visible;
 }
