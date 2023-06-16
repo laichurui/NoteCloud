@@ -85,6 +85,15 @@
 
 <!--注册事件-->
 <script>
+    // 快捷键
+    document.addEventListener("keydown", e => {
+        if (e.repeat) return;
+        if (e.altKey && e.key === "1")
+            document.querySelector(".item[data-ref=notes-panel]").click();
+        else if (e.altKey && e.key === "2")
+            document.querySelector(".item[data-ref=catalogue-panel]").click();
+    });
+
     // 预览界面滚动时，目录的高亮节点同步更新
     document.querySelector(".preview").addEventListener("scroll",
         function () {
