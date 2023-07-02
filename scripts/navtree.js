@@ -102,6 +102,10 @@ function NavTree(treeRoot) {
         expander.addEventListener("click", () => {
             //切换展开/关闭状态
             parentElement.classList.toggle("_opened");
+            let el = parentElement;
+            while (!el.classList.contains("panel"))
+                el = el.parentElement;
+            el.dispatchEvent(new CustomEvent("data-completed")); // 更新滚动条长度
         });
         parentElement.prepend(expander);
         return expander;
