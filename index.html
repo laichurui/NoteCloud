@@ -88,9 +88,9 @@
     // 快捷键
     document.addEventListener("keydown", e => {
         if (e.repeat) return;
-        if (e.altKey && e.key === "1")
+        if (e.altKey && e.key === "n")
             document.querySelector(".item[data-ref=notes-panel]").click();
-        else if (e.altKey && e.key === "2")
+        else if (e.altKey && e.key === "c")
             document.querySelector(".item[data-ref=catalogue-panel]").click();
     });
 
