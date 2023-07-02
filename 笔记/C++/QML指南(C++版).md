@@ -4,7 +4,7 @@ https://doc.qt.io/qt-5/qml-tutorial.html
 
 https://doc.qt.io/qt-5/qtquick-positioning-anchors.html
 
-QML 是用于构建 Qt Quick UI 的语言。
+QML 是用于构建 Qt Quick UI 的语言，本指南只是对官方文档进行翻译和取舍。
 
 # 基础类型
 

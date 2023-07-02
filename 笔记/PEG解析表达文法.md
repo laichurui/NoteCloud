@@ -2,9 +2,9 @@
 
 PEG，即解析表达式语法（Parsing Expression Grammar）。可以方便地、无歧义地表达一个语法。
 
-[解析表达文法](static/解析表达文法-中文维基百科.pdf)
+[解析表达文法](../static/解析表达文法-中文维基百科.pdf)
 
-[peg论文](static/PEG.pdf)
+[peg论文](../static/PEG.pdf)
 
 [peg维基百科](https://m.tw.lvfukeji.com/baike-%E8%A7%A3%E6%9E%90%E8%A1%A8%E8%BE%BE%E6%96%87%E6%B3%95)
 
