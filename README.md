@@ -2,6 +2,8 @@
 
 弹窗消息提醒参考来源：https://learnku.com/f2e/t/29779
 
+拖拽排序列表参考来源：https://www.youtube.com/watch?v=9HUlUnM3UG8
+
 第三方库：
 - marked.js 解析 md 文件
 - highlight.js 对代码部分进行着色
@@ -14,7 +16,7 @@
 
 ## 笔记格式
 
-笔记都是 markdown 文件，参考 [markdown指南](?article=笔记/markdown指南.md) 学习如何编辑md文件。
+笔记都是 markdown 文件，参考 [markdown简易入门](?article=笔记/markdown简易入门.md) 学习如何编辑md文件。
 
 在笔记加载完后，网页会把h1-h6标签提取出来，作为章节标题放入目录栏中。用户只要点击目录栏的章节索引就能跳转到对应章节。如果**需要使用标题，但又不希望被提取成章节索引**，此时设置class属性为**notitle**即可:
 

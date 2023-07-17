@@ -1,430 +1,17 @@
 本文档的参考来源：
 - 李建忠的c++设计模式视频
 - https://github.com/JakubVojvoda/design-patterns-cpp
+- https://refactoringguru.cn/design-patterns/catalog
 
 开发环境：
 - windows 10
 - visual studio 2022
 
-# 模板方法
+# 创建型模式
 
-动机：在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。
+这类模式提供创建对象的机制， 能够提升已有代码的灵活性和可复用性。
 
-模式定义：定义一个操作中的算法的骨架 (稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类可以不改变(复用)一个算法的结构即可重定义(override 重写)该算法的某些特定步骤。
-
-```c++
-class Library
-{
-public:
-    // 有固定的执行顺序
-    // 基类定义稳定的骨架，需要变化的操作交由子类实现
-    void run() {
-        Step1();
-        if (Step2()) { //支持变化 ==> 虚函数的多态调用
-            Step3();
-        }
-        for (int i = 0; i < 4; i++) {
-            Step4(); //支持变化 ==> 虚函数的多态调用
-        }
-        Step5();
-    }
-    // 基类都应该定义虚析构
-    virtual ~Library() { }
-
-protected:
-    void Step1() { }//稳定
-    void Step3() { }//稳定
-    void Step5() { }//稳定
-
-    // 由子类实现具体的操作
-    virtual bool Step2() = 0;//变化
-    virtual void Step4() = 0; //变化
-};
-
-class Application : public Library {
-protected:
-    virtual bool Step2() {
-        //... 子类重写实现
-        return true;
-    }
-
-    virtual void Step4() {
-        //... 子类重写实现
-    }
-};
-
-int main() {
-	// 父类指针可以指向子类
-	Library* lib = new Application();
-	lib->run();
-
-	delete lib;
-	return 0;
-}
-```
-
-# 策略模式
-
-动机：在软件构建过程中，某些对象使用的算法可能多种多样，经常改变，如果将这些算法都编码到对象中，将会使对象变得异常复杂；而且有时候支持不使用的算法也是一个性能负担。
-
-比如很多 if else 语句，
-
-```c++
-if(A) {}
-else if(B) {}
-else if(C) {}
-else if(D) {}
-```
-
-以后需求增加又要加多一些判断条件，修改原来的代码，不好。
-
-模式定义：定义一系列算法，把它们一个个封装起来，并且使它们可互相替换（变化）。该模式使得算法可独立于使用它的客户程序(稳定)而变化（扩展，子类化）。
-
-```c++
-#include <iostream>
-
-// 需要计算税收的品类
-class Context {
-public:
-	std::string name;
-	double total;
-};
-
-// 税收基类
-class TaxStrategy {
-public:
-	virtual double calculate(const Context c) = 0;
-	virtual ~TaxStrategy() {};
-};
-
-class ChinaTax : public TaxStrategy {
-	virtual double calculate(const Context c) {
-		// 随便写的
-		double tax = c.name == "烟草" ? 0.5 : 0.2;
-		return c.total * tax;
-	};
-};
-
-class JapanTax : public TaxStrategy {
-	virtual double calculate(const Context c) {
-		// 随便写的
-		double tax = c.name == "烟草" ? 0.6 : 0.1;
-		return c.total * tax;
-	};
-};
-
-// 策略模式核心
-// 保存一个税收的指针，根据传入的指针调用不同的计算方法
-class AllTax {
-public:
-	AllTax(TaxStrategy* ts) : strategy(ts) {}
-	~AllTax() { delete strategy; }
-
-	double calculate(const Context c) {
-		return strategy->calculate(c);
-	}
-private:
-	TaxStrategy* strategy;
-};
-
-int main()
-{
-	// 需要计算税收的品类
-	Context context;
-	context.name = "烟草";
-	context.total = 10000;
-
-	// 这种做法不易扩展
-	//if (country == "中国") {
-	//    //...
-	//}
-	//else if (country == "日本") {
-	//    //...
-	//}
-
-	// 指定计算中国的税收
-	AllTax cn(new ChinaTax);
-	std::cout << "中国：" << cn.calculate(context) << std::endl;
-
-	// AllTax jp(new JapanTax);
-	AllTax jp(new JapanTax);
-	std::cout << "日本：" << jp.calculate(context) << std::endl;
-
-	return 0;
-}
-```
-
-# 观察者模式
-
-动机：在软件构建过程中，我们需要为某些对象建立一种“通知依赖关系” ——一个对象（目标对象）的状态发生改变，所有的依赖对象（观察者对象）都将得到通知。如果这样的依赖关系过于紧密，将使软件不能很好地抵御变化。
-
-模式定义：定义对象间的一种一对多（变化）的依赖关系，以便当一个对象(Subject)的状态发生改变时，所有依赖于它的对象都得到通知并自动更新。
-
-```c++
-#include <iostream>
-#include <vector>
-
-class Subject;
-
-class Observer
-{
-public:
-	Observer(int s) : observer_state(s) {}
-
-	int getState() { return observer_state; }
-
-	// 更新属性
-	void update(Subject* subject)
-	{
-		observer_state = subject->getState();
-		std::cout << "Observer state updated." << std::endl;
-	}
-
-private:
-	int observer_state;
-};
-
-/*
- * 存储多个 Observer 指针，当属性变化时通知他们
- */
-class Subject
-{
-public:
-	void attach(Observer* observer)
-	{
-		observers.push_back(observer); // 添加观察者
-	}
-
-	void detach(const int index)
-	{
-		observers.erase(observers.begin() + index); // 去除观察者
-	}
-
-	void notify()
-	{
-		for (unsigned int i = 0; i < observers.size(); i++)
-		{
-			observers.at(i)->update(this);
-		}
-	}
-
-	int getState() { return subject_state; }
-
-	void setState(const int s) { subject_state = s; }
-
-private:
-	std::vector<Observer*> observers;
-	int subject_state;
-};
-
-
-int main()
-{
-	Observer observer1(1);
-	Observer observer2(2);
-
-	std::cout << "Observer 1 state: " << observer1.getState() << std::endl;
-	std::cout << "Observer 2 state: " << observer2.getState() << std::endl;
-
-	Subject* subject = new Subject();
-	subject->attach(&observer1);
-	subject->attach(&observer2);
-
-	subject->setState(10);
-	subject->notify();    // 两个观察者的属性也会改变
-
-	std::cout << "Observer 1 state: " << observer1.getState() << std::endl;
-	std::cout << "Observer 2 state: " << observer2.getState() << std::endl;
-
-	delete subject;
-	return 0;
-}
-```
-
-# 装饰模式
-
-动机：在某些情况下我们可能会“过度地使用继承来扩展对象的功能”，由于继承为类型引入的静态特质，使得这种扩展方式缺乏灵活性；并且随着子类的增多（扩展功能的增多），各种子类的组合（扩展功能的组合）会导致更多子类的膨胀。
-
-模式定义：动态（组合）地给一个对象增加一些额外的职责。就增加功能而言，Decorator模式比生成子类（继承）更为灵活（消除重复代码 & 减少子类个数）。
-
-```c++
-#include <iostream>
-
-class Component
-{
-public:
-	virtual ~Component() {}
-
-	virtual void operation()
-	{
-		std::cout << "Component operation" << std::endl;
-	}
-};
-
-/*
- * 装饰基类，通过 Component 的指针来调用其接口
- */
-class Decorator : public Component
-{
-public:
-	~Decorator() {}
-
-	Decorator(Component* c) : component(c) {}
-
-	virtual void operation()
-	{
-		component->operation();
-	}
-
-private:
-	Component* component;
-};
-
-/*
- * 实际的装饰类，在原本的操作上添加额外的职责（操作）
- */
-class ConcreteDecoratorA : public Decorator
-{
-public:
-	ConcreteDecoratorA(Component* c) : Decorator(c) {}
-
-	void operation()
-	{
-		Decorator::operation();
-		std::cout << "Decorator A" << std::endl; // 额外的操作
-	}
-};
-
-class ConcreteDecoratorB : public Decorator
-{
-public:
-	ConcreteDecoratorB(Component* c) : Decorator(c) {}
-
-	void operation()
-	{
-		Decorator::operation();
-		std::cout << "Decorator B" << std::endl; // 额外的操作
-	}
-};
-
-
-int main()
-{
-	Component* cc = new Component();
-	ConcreteDecoratorB* db = new ConcreteDecoratorB(cc);
-	ConcreteDecoratorA* da = new ConcreteDecoratorA(db);
-
-	da->operation();
-
-	delete da;
-	delete db;
-	delete cc;
-
-	return 0;
-}
-```
-
-# 桥模式
-
-动机：由于某些类型的固有的实现逻辑，使得它们具有两个变化的维度，乃至多个纬度的变化。比如，笔记本有品牌、类型等多个维度，将品牌、类型分别做一个类，在笔记本类中再进行组合。
-
-模式定义：将抽象部分(业务功能)与实现部分(平台实现)分离，使它们都可以独立地变化。防止定义过多的子类。
-
-核心就是将变化的维度分开来，然后在想要具体的某一个类时组装起来。
-
-```c++
-// 参考 https://www.cnblogs.com/OfflineBoy/p/15311115.html
-
-#include <iostream>
-
-//品牌
-class Brand
-{
-public:
-	virtual void info() = 0;
-};
-
-class AppleBrand : public Brand
-{
-public:
-	virtual void info()
-	{
-		std::cout << "苹果牌";
-	}
-};
-
-class AsusBrand : public Brand
-{
-public:
-	virtual void info()
-	{
-		std::cout << "华硕牌";
-	}
-};
-
-// 抽象的电脑类，子类扩展为类型维度（笔记本或台式机），再组合品牌维度
-class Computer
-{
-protected:
-	virtual void info() = 0;
-
-	Brand* brand;
-
-public:
-	Computer(Brand* b) : brand(b) {}
-
-	virtual ~Computer()
-	{
-		delete brand;
-	}
-
-	void detail()
-	{
-		brand->info();
-		info();
-		std::cout << std::endl;
-	}
-};
-
-class Desktop : public Computer
-{
-public:
-	Desktop(Brand* brand) : Computer(brand) {}
-
-protected:
-	virtual void info()
-	{
-		std::cout << "台式机";
-	}
-};
-
-class Laptop : public Computer
-{
-public:
-	Laptop(Brand* brand) : Computer(brand) {}
-
-protected:
-	virtual void info()
-	{
-		std::cout << "笔记本";
-	}
-};
-
-int main()
-{
-	// Desktop + AppleBrand
-	Desktop appleDesktop(new AppleBrand);
-	appleDesktop.detail();
-
-	// Laptop + AsusBrand
-	Laptop asusLaptop(new AsusBrand);
-	asusLaptop.detail();
-
-	return 0;
-}
-```
-
-# 工厂方法
+## 工厂方法
 
 动机：在软件系统中，经常面临着创建对象的工作；由于需求的变化，需要创建的对象的具体类型经常变化。
 
@@ -534,7 +121,8 @@ int main()
 }
 ```
 
-# 抽象工厂
+
+## 抽象工厂
 
 动机：在软件系统中，经常面临着“一系列相互依赖的对象”的创建工作；同时，由于需求的变化，往往存在更多系列对象的创建工作。
 
@@ -668,7 +256,7 @@ int main()
 }
 ```
 
-# 原型模式
+## 原型模式
 
 动机：在软件系统中，经常面临着“某些结构复杂的对象”的创建工作；由于需求的变化，这些对象经常面临着剧烈的变化，但是它们却拥有比较一致的接口。
 
@@ -770,7 +358,7 @@ int main()
 }
 ```
 
-# 构建器
+## 构建器
 
 动机：在软件系统中，有时候面临着“一个复杂对象”的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。
 
@@ -864,7 +452,7 @@ int main()
 }
 ```
 
-# 单例模式
+## 单例模式
 
 动机：在软件系统中，经常有这样一些特殊的类，必须保证它们在系统中只存在一个实例，才能确保它们的逻辑正确性以及良好的效率。
 
@@ -963,293 +551,268 @@ int main()
 }
 ```
 
-# 享元模式（Flyweight Pattern）
+# 行为模式
 
-动机：在软件系统采用纯粹对象方案的问题在于大量细粒度的对象会很快充斥在系统中，从而带来很高的运行时代价——主要指内存需求方面的代价。
+这类模式负责对象间的高效沟通和职责委派。
 
-模式定义：运用共享技术有效地支持大量细粒度的对象。
+## 模板方法
+
+动机：在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。
+
+模式定义：定义一个操作中的算法的骨架 (稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类可以不改变(复用)一个算法的结构即可重定义(override 重写)该算法的某些特定步骤。
 
 ```c++
-#include <iostream>
-#include <map>
-
-class Flyweight
+class Library
 {
 public:
-	virtual ~Flyweight() {}
-	virtual void operation() = 0;
+    // 有固定的执行顺序
+    // 基类定义稳定的骨架，需要变化的操作交由子类实现
+    void run() {
+        Step1();
+        if (Step2()) { //支持变化 ==> 虚函数的多态调用
+            Step3();
+        }
+        for (int i = 0; i < 4; i++) {
+            Step4(); //支持变化 ==> 虚函数的多态调用
+        }
+        Step5();
+    }
+    // 基类都应该定义虚析构
+    virtual ~Library() { }
+
+protected:
+    void Step1() { }//稳定
+    void Step3() { }//稳定
+    void Step5() { }//稳定
+
+    // 由子类实现具体的操作
+    virtual bool Step2() = 0;//变化
+    virtual void Step4() = 0; //变化
 };
 
-class ConcreteFlyweight : public Flyweight
-{
-public:
-	ConcreteFlyweight(const int all_state) : state(all_state) {}
+class Application : public Library {
+protected:
+    virtual bool Step2() {
+        //... 子类重写实现
+        return true;
+    }
 
-	~ConcreteFlyweight() {}
-
-	void operation()
-	{
-		std::cout << "Concrete Flyweight with state " << state << std::endl;
-	}
-
-private:
-	int state;
+    virtual void Step4() {
+        //... 子类重写实现
+    }
 };
 
-/*
- * FlyweightFactory
- * creates and manages flyweight objects and ensures
- * that flyweights are shared properly
- */
-class FlyweightFactory
-{
-public:
-	~FlyweightFactory()
-	{
-		for (auto it = flies.begin(); it != flies.end(); it++)
-		{
-			delete it->second;
-		}
-		flies.clear();
-	}
+int main() {
+	// 父类指针可以指向子类
+	Library* lib = new Application();
+	lib->run();
 
-	// 调用这个方法来创建对象
-	// 把对象保存起来，每次都先查找是否已经创建过
-	Flyweight* getFlyweight(const int key)
-	{
-		if (flies.find(key) != flies.end())
-		{
-			return flies[key];
-		}
-		Flyweight* fly = new ConcreteFlyweight(key);
-		flies.insert(std::pair<int, Flyweight*>(key, fly));
-		return fly;
-	}
-
-private:
-	// 保存创建过的对象
-	std::map<int, Flyweight*> flies;
-};
-
-
-int main()
-{
-	FlyweightFactory* factory = new FlyweightFactory;
-	factory->getFlyweight(1)->operation();
-	factory->getFlyweight(2)->operation();
-	delete factory;
+	delete lib;
 	return 0;
 }
 ```
 
-# 门面模式/外观模式
+## 策略模式
 
-动机：外部客户程序和子系统有过多的耦合，会面临很多变化的挑战。需要简化交互接口。
+动机：在软件构建过程中，某些对象使用的算法可能多种多样，经常改变，如果将这些算法都编码到对象中，将会使对象变得异常复杂；而且有时候支持不使用的算法也是一个性能负担。
 
-模式定义：为子系统中的一组接口提供一个一致（稳定）的界面，定义一个高层接口，这个接口使得这一子系统更加容易使用（复用）。
+比如很多 if else 语句，
 
 ```c++
-#include <iostream>
+if(A) {}
+else if(B) {}
+else if(C) {}
+else if(D) {}
+```
 
- /*
-  * Subsystems
-  * implement more complex subsystem functionality
-  * and have no knowledge of the facade
-  */
-class SubsystemA
-{
-public:
-    void suboperation()
-    {
-        std::cout << "Subsystem A method" << std::endl;
-    }
-};
+以后需求增加又要加多一些判断条件，修改原来的代码，不好。
 
-class SubsystemB
-{
-public:
-    void suboperation()
-    {
-        std::cout << "Subsystem B method" << std::endl;
-    }
-};
+模式定义：定义一系列算法，把它们一个个封装起来，并且使它们可互相替换（变化）。该模式使得算法可独立于使用它的客户程序(稳定)而变化（扩展，子类化）。
 
-class SubsystemC
-{
-public:
-    void suboperation()
-    {
-        std::cout << "Subsystem C method" << std::endl;
-    }
-};
-
-/*
- * 客户不直接使用子系统，而是通过这个类的接口来调用
+```c++
+/**
+ * Strategy 策略接口声明公共的操作
+ *
+ * Context 使用本接口来调用定义在具体策略类中的算法
  */
-class Facade
+class Strategy
 {
 public:
-    Facade() : subsystemA(), subsystemB(), subsystemC() {}
-    ~Facade()
-    {
-        delete subsystemA;
-        delete subsystemB;
-        delete subsystemC;
-    }
-
-    // 定义接口使得对子系统的调用更方便
-    void operation1()
-    {
-        subsystemA->suboperation();
-        subsystemB->suboperation();
-    }
-
-    void operation2()
-    {
-        subsystemC->suboperation();
-    }
-
-private:
-    SubsystemA* subsystemA;
-    SubsystemB* subsystemB;
-    SubsystemC* subsystemC;
+    virtual ~Strategy() = default;
+    virtual std::string doAlgorithm(std::string_view data) const = 0;
 };
 
+class Context
+{
+    /**
+     * @var Strategy Context 类管理一个 Strategy 对象的引用，利用虚函数的动态绑定
+	 * 来访问具体策略类的算法实现。
+     */
+private:
+    std::unique_ptr<Strategy> strategy_;
+    /**
+     * Context 通常在构造函数接受 strategy 对象，同时也提供对应的 setter 函数。
+     */
+public:
+    explicit Context(std::unique_ptr<Strategy> &&strategy = {}) : strategy_(std::move(strategy))
+    {
+    }
+    /**
+     * 通常，Context 允许在运行时替换 strategy 对象。
+     */
+    void set_strategy(std::unique_ptr<Strategy> &&strategy)
+    {
+        strategy_ = std::move(strategy);
+    }
+    /**
+     * Context 把一些工作交给 strategy 对象完成，而不是实现不同版本的算法。
+	 * 替换 strategy 对象来应用不同策略的算法。
+     */
+    void doSomeBusinessLogic() const
+    {
+        if (strategy_) {
+            std::cout << "Context: Sorting data using the strategy (not sure how it'll do it)\n";
+            std::string result = strategy_->doAlgorithm("aecbd");
+            std::cout << result << "\n";
+        } else {
+            std::cout << "Context: Strategy isn't set\n";
+        }
+    }
+};
+
+/**
+ * 具体策略类的实现。
+ */
+class ConcreteStrategyA : public Strategy
+{
+public:
+    std::string doAlgorithm(std::string_view data) const override
+    {
+        std::string result(data);
+        std::sort(std::begin(result), std::end(result));
+
+        return result;
+    }
+};
+class ConcreteStrategyB : public Strategy
+{
+    std::string doAlgorithm(std::string_view data) const override
+    {
+        std::string result(data);
+        std::sort(std::begin(result), std::end(result), std::greater<>());
+
+        return result;
+    }
+};
+
+void clientCode()
+{
+	// 选择策略A
+    Context context(std::make_unique<ConcreteStrategyA>());
+    std::cout << "Client: Strategy is set to normal sorting.\n";
+    context.doSomeBusinessLogic();
+    std::cout << "\n";
+    std::cout << "Client: Strategy is set to reverse sorting.\n";
+	// 选择策略B
+    context.set_strategy(std::make_unique<ConcreteStrategyB>());
+    context.doSomeBusinessLogic();
+}
 
 int main()
 {
-    Facade* facade = new Facade();
-
-    facade->operation1();
-    facade->operation2();
-    delete facade;
-
+    clientCode();
     return 0;
 }
 ```
 
-# 代理模式
+## 观察者模式
 
-动机：在面向对象系统中，有些对象由于某些原因（比如对象创建的开销很大，或者某些操作需要安全控制，或者需要进程外的访问等），直接访问会给使用者或者系统结构带来很多麻烦。增加一层间接层是常见的解决方式。
+动机：在软件构建过程中，我们需要为某些对象建立一种“通知依赖关系” ——一个对象（目标对象）的状态发生改变，所有的依赖对象（观察者对象）都将得到通知。如果这样的依赖关系过于紧密，将使软件不能很好地抵御变化。
 
-模式定义：为其他对象提供一种代理以控制（隔离，使用接口）对这个对象的访问。
-
-主要解决：在直接访问对象时带来的问题，比如说：要访问的对象在远程的机器上。
+模式定义：定义对象间的一种一对多（变化）的依赖关系，以便当一个对象(Subject)的状态发生改变时，所有依赖于它的对象都得到通知并自动更新。
 
 ```c++
 #include <iostream>
+#include <vector>
 
+class Subject;
+
+class Observer
+{
+public:
+	Observer(int s) : observer_state(s) {}
+
+	int getState() { return observer_state; }
+
+	// 更新属性
+	void update(Subject* subject)
+	{
+		observer_state = subject->getState();
+		std::cout << "Observer state updated." << std::endl;
+	}
+
+private:
+	int observer_state;
+};
+
+/*
+ * 存储多个 Observer 指针，当属性变化时通知他们
+ */
 class Subject
 {
 public:
-	virtual ~Subject() { /* ... */ }
-
-	virtual void request() = 0;
-};
-
-class RealSubject : public Subject
-{
-public:
-	void request()
+	void attach(Observer* observer)
 	{
-		std::cout << "Real Subject request" << std::endl;
-	}
-};
-
-class Proxy : public Subject
-{
-public:
-	Proxy()
-	{
-		// 代理模式帮助我们创建对象
-		// 代理类提供方法来访问这个对象
-		subject = new RealSubject();
+		observers.push_back(observer); // 添加观察者
 	}
 
-	~Proxy()
+	void detach(const int index)
 	{
-		delete subject;
+		observers.erase(observers.begin() + index); // 去除观察者
 	}
 
-	void request()
+	void notify()
 	{
-		subject->request();
+		for (unsigned int i = 0; i < observers.size(); i++)
+		{
+			observers.at(i)->update(this);
+		}
 	}
+
+	int getState() { return subject_state; }
+
+	void setState(const int s) { subject_state = s; }
 
 private:
-	// 直接创建或访问对象比较麻烦时，代理类才有用
-	RealSubject* subject;
+	std::vector<Observer*> observers;
+	int subject_state;
 };
 
 
 int main()
 {
-	Proxy* proxy = new Proxy();
-	proxy->request();
+	Observer observer1(1);
+	Observer observer2(2);
 
-	delete proxy;
+	std::cout << "Observer 1 state: " << observer1.getState() << std::endl;
+	std::cout << "Observer 2 state: " << observer2.getState() << std::endl;
+
+	Subject* subject = new Subject();
+	subject->attach(&observer1);
+	subject->attach(&observer2);
+
+	subject->setState(10);
+	subject->notify();    // 两个观察者的属性也会改变
+
+	std::cout << "Observer 1 state: " << observer1.getState() << std::endl;
+	std::cout << "Observer 2 state: " << observer2.getState() << std::endl;
+
+	delete subject;
 	return 0;
 }
 ```
 
-# 适配器
-
-动机：在软件系统中，由于应用环境的变化，常常需要将“一些现存的对象”放在新的环境中应用，但是新环境要求的接口是这些现存对象所不满足的。
-
-模式定义：将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
-
-```c++
-#include <iostream>
-
-class Target
-{
-public:
-	virtual ~Target() {}
-
-	virtual void request() = 0;
-};
-
-class Adaptee
-{
-public:
-	void specificRequest()
-	{
-		std::cout << "specific request" << std::endl;
-	}
-};
-
-class Adapter : public Target
-{
-public:
-	Adapter() : adaptee() {}
-
-	~Adapter()
-	{
-		delete adaptee;
-	}
-
-	// 核心部分
-	void request()
-	{
-		adaptee->specificRequest();
-	}
-
-private:
-	Adaptee* adaptee;
-};
-
-
-int main()
-{
-	Target* t = new Adapter();
-	t->request();
-	delete t;
-
-	return 0;
-}
-```
-
-# 中介者
+## 中介者
 
 动机：在软件构建过程中，经常会出现多个对象互相关联交互的情况，对象之间常常会维持一种复杂的引用关系，如果遇到一些需求的更改，这种直接的引用关系将面临不断的变化。
 
@@ -1377,7 +940,7 @@ int main()
 }
 ```
 
-# 状态模式
+## 状态模式
 
 动机：在软件构建过程中，某些对象的状态如果改变，其行为也会随之而发生变化，比如文档处于只读状态，其支持的行为和读写状态支持的行为就可能完全不同。
 
@@ -1481,7 +1044,7 @@ int main()
 }
 ```
 
-# 备忘录
+## 备忘录
 
 动机：在软件构建过程中，某些对象的状态在转换过程中，可能由于某种需要，要求程序能够回溯到对象之前处于某个点时的状态。如果使用一些公有接口来让其他对象得到对象的状态，便会暴露对象的细节实现。
 
@@ -1629,119 +1192,7 @@ int main()
 }
 ```
 
-# 组合模式
-
-动机：软件在某些情况下，客户代码过多地依赖与对象容器复杂的内部实现结构，对象容器内部实现结构的变化将引起客户代码的频繁变化，带来了代码的维护性、扩展性等弊端。
-
-模式定义：将对象组合成树形结构以表示"部分-整体"的层次结构。组合模式使得用户**对单个对象和组合对象的使用具有一致性**。
-
-```c++
-#include <iostream>
-#include <vector>
-
- /*
-  * Component
-  * defines an interface for all objects in the composition
-  * both the composite and the leaf nodes
-  */
-class Component
-{
-public:
-	virtual ~Component() {}
-
-	virtual Component* getChild(int)
-	{
-		return 0;
-	}
-
-	virtual void add(Component*) { /* ... */ }
-	virtual void remove(int) { /* ... */ }
-
-	virtual void operation() = 0;
-};
-
-/*
- * Composite 组合对象
- * defines behavior of the components having children
- * and store child components
- */
-class Composite : public Component
-{
-public:
-	~Composite()
-	{
-		for (unsigned int i = 0; i < children.size(); i++)
-		{
-			delete children[i];
-		}
-	}
-
-	Component* getChild(const unsigned int index)
-	{
-		return children[index];
-	}
-
-	void add(Component* component)
-	{
-		children.push_back(component);
-	}
-
-	void remove(const unsigned int index)
-	{
-		Component* child = children[index];
-		children.erase(children.begin() + index);
-		delete child;
-	}
-
-	void operation()
-	{
-		for (unsigned int i = 0; i < children.size(); i++)
-		{
-			children[i]->operation();
-		}
-	}
-
-private:
-	std::vector<Component*> children;
-};
-
-/*
- * 单个对象和组合对象都继承Component，有一致的接口
- */
-class Leaf : public Component
-{
-public:
-	Leaf(const int i) : id(i) {}
-
-	~Leaf() {}
-
-	void operation()
-	{
-		std::cout << "Leaf " << id << " operation" << std::endl;
-	}
-
-private:
-	int id;
-};
-
-
-int main()
-{
-	Composite composite;
-
-	for (unsigned int i = 0; i < 5; i++)
-	{
-		composite.add(new Leaf(i));
-	}
-
-	composite.remove(0);
-	composite.operation();
-
-	return 0;
-}
-```
-
-# 迭代器
+## 迭代器
 
 动机：在软件构建过程中，集合对象内部结构常常变化各异。但对于这些集合对象，我们希望在不暴露其内部结构的同时，可以让外部客户代码透明地访问其中包含的元素；同时这种“透明遍历”也为“同一种算法在多种集合对象上进行操作”提供了可能。
 
@@ -1892,7 +1343,7 @@ int main()
 }
 ```
 
-# 职责链
+## 职责链
 
 动机：在软件构建过程中，一个请求可能被多个对象处理，但是每个请求在运行时只能有一个接受者，如果显式指定，将必不可少地带来请求发送者与接受者的紧耦合。
 
@@ -1989,7 +1440,7 @@ int main()
 }
 ```
 
-# 命令模式
+## 命令模式
 
 动机：在软件构建过程中，“行为请求者”与“行为实现者”通常呈现一种“紧耦合”。但在某些场合——比如需要对行为进行“记录、撤销、重做、事务”等处理，这种无法抵御变化的紧耦合是不合适的。
 
@@ -2094,7 +1545,7 @@ int main()
 }
 ```
 
-# 访问器
+## 访问器
 
 动机：在软件构建过程中，由于需求的改变，某些类层次结构中常常需要增加新的行为（方法），如果直接在基类中做这样的更改，将会给子类带来很繁重的变更负担，甚至破坏原有设计。
 
@@ -2221,7 +1672,7 @@ int main()
 }
 ```
 
-# 解析器
+## 解析器
 
 动机：在软件构建过程中，如果某一特定领域的问题比较复杂，类似的结构不断重复出现，如果使用普通的编程方式来实现将面临非常频繁的变化。
 
@@ -2334,6 +1785,589 @@ int main()
 	std::cout << " = " << exp->interpret(&context) << std::endl;
 
 	delete exp;
+	return 0;
+}
+```
+
+# 结构型模式
+
+## 适配器
+
+动机：在软件系统中，由于应用环境的变化，常常需要将“一些现存的对象”放在新的环境中应用，但是新环境要求的接口是这些现存对象所不满足的。
+
+模式定义：将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
+
+```c++
+#include <iostream>
+
+class Target
+{
+public:
+	virtual ~Target() {}
+
+	virtual void request() = 0;
+};
+
+class Adaptee
+{
+public:
+	void specificRequest()
+	{
+		std::cout << "specific request" << std::endl;
+	}
+};
+
+class Adapter : public Target
+{
+public:
+	Adapter() : adaptee() {}
+
+	~Adapter()
+	{
+		delete adaptee;
+	}
+
+	// 核心部分
+	void request()
+	{
+		adaptee->specificRequest();
+	}
+
+private:
+	Adaptee* adaptee;
+};
+
+
+int main()
+{
+	Target* t = new Adapter();
+	t->request();
+	delete t;
+
+	return 0;
+}
+```
+
+## 桥模式
+
+动机：由于某些类型的固有的实现逻辑，使得它们具有两个变化的维度，乃至多个纬度的变化。比如，笔记本有品牌、类型等多个维度，将品牌、类型分别做一个类，在笔记本类中再进行组合。
+
+模式定义：将抽象部分(业务功能)与实现部分(平台实现)分离，使它们都可以独立地变化。防止定义过多的子类。
+
+核心就是将变化的维度分开来，然后在想要具体的某一个类时组装起来。
+
+```c++
+// 参考 https://www.cnblogs.com/OfflineBoy/p/15311115.html
+
+#include <iostream>
+
+//品牌
+class Brand
+{
+public:
+	virtual void info() = 0;
+};
+
+class AppleBrand : public Brand
+{
+public:
+	virtual void info()
+	{
+		std::cout << "苹果牌";
+	}
+};
+
+class AsusBrand : public Brand
+{
+public:
+	virtual void info()
+	{
+		std::cout << "华硕牌";
+	}
+};
+
+// 抽象的电脑类，子类扩展为类型维度（笔记本或台式机），再组合品牌维度
+class Computer
+{
+protected:
+	virtual void info() = 0;
+
+	Brand* brand;
+
+public:
+	Computer(Brand* b) : brand(b) {}
+
+	virtual ~Computer()
+	{
+		delete brand;
+	}
+
+	void detail()
+	{
+		brand->info();
+		info();
+		std::cout << std::endl;
+	}
+};
+
+class Desktop : public Computer
+{
+public:
+	Desktop(Brand* brand) : Computer(brand) {}
+
+protected:
+	virtual void info()
+	{
+		std::cout << "台式机";
+	}
+};
+
+class Laptop : public Computer
+{
+public:
+	Laptop(Brand* brand) : Computer(brand) {}
+
+protected:
+	virtual void info()
+	{
+		std::cout << "笔记本";
+	}
+};
+
+int main()
+{
+	// Desktop + AppleBrand
+	Desktop appleDesktop(new AppleBrand);
+	appleDesktop.detail();
+
+	// Laptop + AsusBrand
+	Laptop asusLaptop(new AsusBrand);
+	asusLaptop.detail();
+
+	return 0;
+}
+```
+
+## 组合模式
+
+动机：软件在某些情况下，客户代码过多地依赖与对象容器复杂的内部实现结构，对象容器内部实现结构的变化将引起客户代码的频繁变化，带来了代码的维护性、扩展性等弊端。
+
+模式定义：将对象组合成树形结构以表示"部分-整体"的层次结构。组合模式使得用户**对单个对象和组合对象的使用具有一致性**。
+
+```c++
+#include <iostream>
+#include <vector>
+
+ /*
+  * Component
+  * defines an interface for all objects in the composition
+  * both the composite and the leaf nodes
+  */
+class Component
+{
+public:
+	virtual ~Component() {}
+
+	virtual Component* getChild(int)
+	{
+		return 0;
+	}
+
+	virtual void add(Component*) { /* ... */ }
+	virtual void remove(int) { /* ... */ }
+
+	virtual void operation() = 0;
+};
+
+/*
+ * Composite 组合对象
+ * defines behavior of the components having children
+ * and store child components
+ */
+class Composite : public Component
+{
+public:
+	~Composite()
+	{
+		for (unsigned int i = 0; i < children.size(); i++)
+		{
+			delete children[i];
+		}
+	}
+
+	Component* getChild(const unsigned int index)
+	{
+		return children[index];
+	}
+
+	void add(Component* component)
+	{
+		children.push_back(component);
+	}
+
+	void remove(const unsigned int index)
+	{
+		Component* child = children[index];
+		children.erase(children.begin() + index);
+		delete child;
+	}
+
+	void operation()
+	{
+		for (unsigned int i = 0; i < children.size(); i++)
+		{
+			children[i]->operation();
+		}
+	}
+
+private:
+	std::vector<Component*> children;
+};
+
+/*
+ * 单个对象和组合对象都继承Component，有一致的接口
+ */
+class Leaf : public Component
+{
+public:
+	Leaf(const int i) : id(i) {}
+
+	~Leaf() {}
+
+	void operation()
+	{
+		std::cout << "Leaf " << id << " operation" << std::endl;
+	}
+
+private:
+	int id;
+};
+
+
+int main()
+{
+	Composite composite;
+
+	for (unsigned int i = 0; i < 5; i++)
+	{
+		composite.add(new Leaf(i));
+	}
+
+	composite.remove(0);
+	composite.operation();
+
+	return 0;
+}
+```
+
+## 装饰模式
+
+动机：在某些情况下我们可能会“过度地使用继承来扩展对象的功能”，由于继承为类型引入的静态特质，使得这种扩展方式缺乏灵活性；并且随着子类的增多（扩展功能的增多），各种子类的组合（扩展功能的组合）会导致更多子类的膨胀。
+
+模式定义：动态（组合）地给一个对象增加一些额外的职责。就增加功能而言，Decorator模式比生成子类（继承）更为灵活（消除重复代码 & 减少子类个数）。
+
+```c++
+#include <iostream>
+
+class Component
+{
+public:
+	virtual ~Component() {}
+
+	virtual void operation()
+	{
+		std::cout << "Component operation" << std::endl;
+	}
+};
+
+/*
+ * 装饰基类，通过 Component 的指针来调用其接口
+ */
+class Decorator : public Component
+{
+public:
+	~Decorator() {}
+
+	Decorator(Component* c) : component(c) {}
+
+	virtual void operation()
+	{
+		component->operation();
+	}
+
+private:
+	Component* component;
+};
+
+/*
+ * 实际的装饰类，在原本的操作上添加额外的职责（操作）
+ */
+class ConcreteDecoratorA : public Decorator
+{
+public:
+	ConcreteDecoratorA(Component* c) : Decorator(c) {}
+
+	void operation()
+	{
+		Decorator::operation();
+		std::cout << "Decorator A" << std::endl; // 额外的操作
+	}
+};
+
+class ConcreteDecoratorB : public Decorator
+{
+public:
+	ConcreteDecoratorB(Component* c) : Decorator(c) {}
+
+	void operation()
+	{
+		Decorator::operation();
+		std::cout << "Decorator B" << std::endl; // 额外的操作
+	}
+};
+
+
+int main()
+{
+	Component* cc = new Component();
+	ConcreteDecoratorB* db = new ConcreteDecoratorB(cc);
+	ConcreteDecoratorA* da = new ConcreteDecoratorA(db);
+
+	da->operation();
+
+	delete da;
+	delete db;
+	delete cc;
+
+	return 0;
+}
+```
+
+## 门面模式/外观模式
+
+动机：外部客户程序和子系统有过多的耦合，会面临很多变化的挑战。需要简化交互接口。
+
+模式定义：为子系统中的一组接口提供一个一致（稳定）的界面，定义一个高层接口，这个接口使得这一子系统更加容易使用（复用）。
+
+```c++
+#include <iostream>
+
+ /*
+  * Subsystems
+  * implement more complex subsystem functionality
+  * and have no knowledge of the facade
+  */
+class SubsystemA
+{
+public:
+    void suboperation()
+    {
+        std::cout << "Subsystem A method" << std::endl;
+    }
+};
+
+class SubsystemB
+{
+public:
+    void suboperation()
+    {
+        std::cout << "Subsystem B method" << std::endl;
+    }
+};
+
+class SubsystemC
+{
+public:
+    void suboperation()
+    {
+        std::cout << "Subsystem C method" << std::endl;
+    }
+};
+
+/*
+ * 客户不直接使用子系统，而是通过这个类的接口来调用
+ */
+class Facade
+{
+public:
+    Facade() : subsystemA(), subsystemB(), subsystemC() {}
+    ~Facade()
+    {
+        delete subsystemA;
+        delete subsystemB;
+        delete subsystemC;
+    }
+
+    // 定义接口使得对子系统的调用更方便
+    void operation1()
+    {
+        subsystemA->suboperation();
+        subsystemB->suboperation();
+    }
+
+    void operation2()
+    {
+        subsystemC->suboperation();
+    }
+
+private:
+    SubsystemA* subsystemA;
+    SubsystemB* subsystemB;
+    SubsystemC* subsystemC;
+};
+
+
+int main()
+{
+    Facade* facade = new Facade();
+
+    facade->operation1();
+    facade->operation2();
+    delete facade;
+
+    return 0;
+}
+```
+
+## 享元模式（Flyweight Pattern）
+
+动机：在软件系统采用纯粹对象方案的问题在于大量细粒度的对象会很快充斥在系统中，从而带来很高的运行时代价——主要指内存需求方面的代价。
+
+模式定义：运用共享技术有效地支持大量细粒度的对象。
+
+```c++
+#include <iostream>
+#include <map>
+
+class Flyweight
+{
+public:
+	virtual ~Flyweight() {}
+	virtual void operation() = 0;
+};
+
+class ConcreteFlyweight : public Flyweight
+{
+public:
+	ConcreteFlyweight(const int all_state) : state(all_state) {}
+
+	~ConcreteFlyweight() {}
+
+	void operation()
+	{
+		std::cout << "Concrete Flyweight with state " << state << std::endl;
+	}
+
+private:
+	int state;
+};
+
+/*
+ * FlyweightFactory
+ * creates and manages flyweight objects and ensures
+ * that flyweights are shared properly
+ */
+class FlyweightFactory
+{
+public:
+	~FlyweightFactory()
+	{
+		for (auto it = flies.begin(); it != flies.end(); it++)
+		{
+			delete it->second;
+		}
+		flies.clear();
+	}
+
+	// 调用这个方法来创建对象
+	// 把对象保存起来，每次都先查找是否已经创建过
+	Flyweight* getFlyweight(const int key)
+	{
+		if (flies.find(key) != flies.end())
+		{
+			return flies[key];
+		}
+		Flyweight* fly = new ConcreteFlyweight(key);
+		flies.insert(std::pair<int, Flyweight*>(key, fly));
+		return fly;
+	}
+
+private:
+	// 保存创建过的对象
+	std::map<int, Flyweight*> flies;
+};
+
+
+int main()
+{
+	FlyweightFactory* factory = new FlyweightFactory;
+	factory->getFlyweight(1)->operation();
+	factory->getFlyweight(2)->operation();
+	delete factory;
+	return 0;
+}
+```
+
+## 代理模式
+
+动机：在面向对象系统中，有些对象由于某些原因（比如对象创建的开销很大，或者某些操作需要安全控制，或者需要进程外的访问等），直接访问会给使用者或者系统结构带来很多麻烦。增加一层间接层是常见的解决方式。
+
+模式定义：为其他对象提供一种代理以控制（隔离，使用接口）对这个对象的访问。
+
+主要解决：在直接访问对象时带来的问题，比如说：要访问的对象在远程的机器上。
+
+```c++
+#include <iostream>
+
+class Subject
+{
+public:
+	virtual ~Subject() { /* ... */ }
+
+	virtual void request() = 0;
+};
+
+class RealSubject : public Subject
+{
+public:
+	void request()
+	{
+		std::cout << "Real Subject request" << std::endl;
+	}
+};
+
+class Proxy : public Subject
+{
+public:
+	Proxy()
+	{
+		// 代理模式帮助我们创建对象
+		// 代理类提供方法来访问这个对象
+		subject = new RealSubject();
+	}
+
+	~Proxy()
+	{
+		delete subject;
+	}
+
+	void request()
+	{
+		subject->request();
+	}
+
+private:
+	// 直接创建或访问对象比较麻烦时，代理类才有用
+	RealSubject* subject;
+};
+
+
+int main()
+{
+	Proxy* proxy = new Proxy();
+	proxy->request();
+
+	delete proxy;
 	return 0;
 }
 ```
